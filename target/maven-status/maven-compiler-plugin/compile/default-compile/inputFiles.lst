@@ -1,0 +1,14 @@
+D:\2018\Licenta\LoadShedding\src\main\java\controllers\MainController.java
+D:\2018\Licenta\LoadShedding\src\main\java\managers\LoadSheddingManager.java
+D:\2018\Licenta\LoadShedding\src\main\java\core\SoldierStatusReport.java
+D:\2018\Licenta\LoadShedding\src\main\java\managers\LoadSheddersFactory.java
+D:\2018\Licenta\LoadShedding\src\main\java\core\Measurement.java
+D:\2018\Licenta\LoadShedding\src\main\java\managers\FileManager.java
+D:\2018\Licenta\LoadShedding\src\main\java\core\GlobalResult.java
+D:\2018\Licenta\LoadShedding\src\main\java\loadshedders\SemanticLoadShedder.java
+D:\2018\Licenta\LoadShedding\src\main\java\loadshedders\RandomLoadShedder.java
+D:\2018\Licenta\LoadShedding\src\main\java\core\BodyTemperatureMeasurement.java
+D:\2018\Licenta\LoadShedding\src\main\java\loadshedders\LoadShedder.java
+D:\2018\Licenta\LoadShedding\src\main\java\core\Soldier.java
+D:\2018\Licenta\LoadShedding\src\main\java\core\LoadShedderType.java
+D:\2018\Licenta\LoadShedding\src\main\java\Main.java
