@@ -17,6 +17,8 @@ public abstract class LoadShedder {
     private GlobalResult globalResult;
     protected LoadShedderType loadShedderType;
 
+    public LoadShedder(){}
+
     LoadShedder(String inputFile){
         this.loadSheddingManager = new LoadSheddingManager(inputFile);
         this.standardResults = this.loadSheddingManager.getStandardResults();
@@ -35,7 +37,7 @@ public abstract class LoadShedder {
         }
     }
 
-    abstract void dropTuples(int dropPercent, SoldierStatusReport soldierStatusReport);
+    protected abstract void dropTuples(int dropPercent, SoldierStatusReport soldierStatusReport);
 
     public List<Double> shedLoad(){
         List<Double> errors = new ArrayList<>();

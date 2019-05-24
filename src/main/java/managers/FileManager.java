@@ -19,6 +19,7 @@ public class FileManager {
             while ((line = br.readLine()) != null){
                 String[] splittedLine = line.split(",");
                 Soldier soldier = new Soldier();
+                soldier.setTimestamp(Integer.valueOf(splittedLine[0]));
                 soldier.setId(Integer.valueOf(splittedLine[1]));
                 soldier.setBodyTemperature(Double.valueOf(splittedLine[2]));
                 soldier.setSystolicBloodPressure(Integer.valueOf(splittedLine[3]));

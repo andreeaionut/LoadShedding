@@ -43,7 +43,7 @@ public class ChartController {
         });
     }
 
-    public void initView(HashMap<LoadShedderType, List<Double>> comparatorErrors){
+    public void initComparatorView(HashMap<LoadShedderType, List<Double>> comparatorErrors){
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Load Shedding Percent");
@@ -118,6 +118,50 @@ public class ChartController {
         series.getData().add(new XYChart.Data(70, errors.get(6)));
         series.getData().add(new XYChart.Data(80, errors.get(7)));
         series.getData().add(new XYChart.Data(90, errors.get(8)));
+
+        //Setting the data to Line chart
+        lineChart.getData().add(series);
+
+        btnExport.setLayoutX(550);
+        btnExport.setLayoutY(350);
+        //Creating a Group object
+        Group root = new Group(lineChart, btnExport);
+
+        //Creating a scene object
+        Scene scene = new Scene(root, 700, 400);
+        String css = ChartController.class.getResource("../style.css").toExternalForm();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(css);
+
+        //Setting title to the Stage
+        stage.setTitle("Line Chart");
+
+        //Adding scene to the stage
+        stage.setScene(scene);
+
+        //Displaying the contents of the stage
+        stage.show();
+    }
+
+    public void initTimestampView(HashMap<Integer, Double> errors){
+        //Defining the x axis
+        NumberAxis xAxis = new NumberAxis(0, 100, 10);
+        xAxis.setLabel("Load Shedding Percent");
+
+        //Defining the y axis
+        NumberAxis yAxis = new NumberAxis   (0.0, 1.0, 0.1);
+        yAxis.setLabel("Mean error");
+
+        //Creating the line chart
+        lineChart = new LineChart(xAxis, yAxis);
+
+        //Prepare XYChart.Series objects by setting data
+        XYChart.Series series = new XYChart.Series();
+        series.setName("Load shedding error evolution");
+
+        for (Map.Entry<Integer, Double> entry : errors.entrySet()) {
+            series.getData().add(new XYChart.Data(entry.getKey(), entry.getValue()));
+        }
 
         //Setting the data to Line chart
         lineChart.getData().add(series);

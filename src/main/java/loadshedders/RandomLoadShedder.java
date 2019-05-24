@@ -14,7 +14,8 @@ public class RandomLoadShedder extends LoadShedder {
         this.loadShedderType = LoadShedderType.RANDOM;
     }
 
-    void dropTuples(int dropPercent, SoldierStatusReport soldierStatusReport){
+    @Override
+     protected void dropTuples(int dropPercent, SoldierStatusReport soldierStatusReport){
         int size;
         Random random = new Random();
         for(int counter = 0; counter < dropPercent; counter++){

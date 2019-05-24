@@ -69,6 +69,18 @@
     -fx-font-family: "Bookman Old Style";
 }
 
+#tbtnGlobalComputation{
+    -fx-text-fill: whitesmoke;
+    -fx-background-color: 	#ADD8E6;
+    -fx-font-family: "Bookman Old Style";
+}
+
+#tbtnTimestampComputation{
+    -fx-text-fill: whitesmoke;
+    -fx-background-color: 	#FFB6C1;
+    -fx-font-family: "Bookman Old Style";
+}
+
 #apButtons{
     -fx-background-color:  #2A5058;
 

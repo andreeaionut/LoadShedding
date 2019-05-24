@@ -27,7 +27,8 @@ public class SemanticLoadShedder extends LoadShedder {
         return semanticIndex;
     }
 
-    void dropTuples(int dropPercent, SoldierStatusReport soldierStatusReport) {
+    @Override
+     protected void dropTuples(int dropPercent, SoldierStatusReport soldierStatusReport) {
         for(int counter = 0; counter < dropPercent; counter++){
             int randomIndex = this.getSemanticIndex(soldierStatusReport);
             Measurement<Double> bodyTemperatureMeasurement = (BodyTemperatureMeasurement) soldierStatusReport.getMeasurements().remove(randomIndex);

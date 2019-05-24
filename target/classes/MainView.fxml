@@ -7,27 +7,48 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="mainAnchorPane" prefHeight="400.0" prefWidth="700.0" stylesheets="style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
    <children>
       <Button fx:id="btnUploadFile" layoutX="505.0" layoutY="37.0" mnemonicParsing="false" onAction="#handleUploadFile" prefHeight="32.0" prefWidth="150.0" text="Upload file" />
       <TextField fx:id="txtUploadedFile" disable="true" editable="false" layoutX="36.0" layoutY="37.0" prefHeight="26.0" prefWidth="440.0" />
-      <RadioButton fx:id="rbtnRandomLS" disable="true" layoutX="56.0" layoutY="181.0" mnemonicParsing="false" onAction="#handleRadioButtonRandom" text="Random Load Shedder">
-         <font>
-            <Font size="11.0" />
-         </font></RadioButton>
-      <RadioButton fx:id="rbtnSemanticLS" disable="true" layoutX="56.0" layoutY="220.0" mnemonicParsing="false" onAction="#handleRadioButtonSemantic" text="Semantic Load Shedder">
-         <font>
-            <Font size="11.0" />
-         </font></RadioButton>
-      <ToggleButtonGroup layoutX="36.0" layoutY="105.0" prefHeight="42.0" prefWidth="440.0" selectionType="SINGLE">
+      <ToggleButtonGroup layoutX="36.0" layoutY="157.0" prefHeight="42.0" prefWidth="440.0" selectionType="SINGLE">
           <toggles>
               <ToggleButton fx:id="tbtnChoose" onAction="#handleChooseClick" prefHeight="39.0" prefWidth="236.0" text="Choose Load Shedder type" />
               <ToggleButton fx:id="tbtnCompare" onAction="#handleCompareClick" prefHeight="39.0" prefWidth="208.0" text="Compare Load Shedders" />
           </toggles>
       </ToggleButtonGroup>
-      <Button fx:id="btnGo" disable="true" layoutX="505.0" layoutY="105.0" mnemonicParsing="false" onAction="#handleGo" prefHeight="42.0" prefWidth="146.0" text="GO" />
-      <Button fx:id="btnChart" disable="true" layoutX="505.0" layoutY="168.0" mnemonicParsing="false" onAction="#handleChart" prefHeight="42.0" prefWidth="146.0" text="Chart" />
+      <Pane layoutX="479.0" layoutY="146.0" prefHeight="174.0" prefWidth="208.0">
+         <children>
+            <Button fx:id="btnGo" disable="true" layoutX="27.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleGo" prefHeight="42.0" prefWidth="146.0" text="GO" />
+            <Button fx:id="btnChart" disable="true" layoutX="27.0" layoutY="77.0" mnemonicParsing="false" onAction="#handleChart" prefHeight="42.0" prefWidth="146.0" text="Chart" />
+         </children>
+      </Pane>
+      <Pane layoutX="50.0" layoutY="208.0" prefHeight="111.0" prefWidth="200.0">
+         <children>
+            <RadioButton fx:id="rbtnRandomLS" disable="true" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRadioButtonRandom" text="Random Load Shedder">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </RadioButton>
+            <RadioButton fx:id="rbtnSemanticLS" disable="true" layoutX="21.0" layoutY="53.0" mnemonicParsing="false" onAction="#handleRadioButtonSemantic" text="Semantic Load Shedder">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </RadioButton>
+         </children>
+      </Pane>
+      <Pane layoutX="36.0" layoutY="80.0" prefHeight="71.0" prefWidth="440.0">
+         <children>
+            <ToggleButtonGroup layoutY="29.0" prefHeight="42.0" prefWidth="440.0" selectionType="SINGLE">
+               <toggles>
+                  <ToggleButton fx:id="tbtnGlobalComputation" onAction="#handleGlobalComputationClick" prefHeight="39.0" prefWidth="236.0" text="Global Computation" />
+                  <ToggleButton fx:id="tbtnTimestampComputation" onAction="#handleTimestampComputationClick" prefHeight="39.0" prefWidth="208.0" text="Timestamp Computation" />
+               </toggles>
+            </ToggleButtonGroup>
+         </children>
+      </Pane>
    </children>
 </AnchorPane>
