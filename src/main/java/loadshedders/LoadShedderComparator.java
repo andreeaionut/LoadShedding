@@ -1,35 +1,32 @@
 package loadshedders;
 
+import core.Computation;
 import core.LoadShedderType;
-import managers.LoadSheddersFactory;
+import core.LoadSheddingFinalResult;
+import services.LoadSheddingService;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class LoadShedderComparator {
 
-    private HashMap<LoadShedderType, List<Double>> errors = new HashMap<>();
+    private HashMap<LoadShedderType, LoadSheddingFinalResult> errors = new HashMap<>();
+    private LoadSheddingService loadSheddingService;
 
-    private static LoadShedderComparator instance;
-
-    public static LoadShedderComparator getInstance(){
-        if(instance == null){
-            instance = new LoadShedderComparator();
-        }
-        return instance;
+    public LoadShedderComparator(LoadSheddingService loadSheddingService) {
+        this.loadSheddingService = loadSheddingService;
     }
 
-    private LoadShedderComparator() {
-    }
-
-    public HashMap<LoadShedderType, List<Double>> compareLoadShedders(String inputFile){
-        List<LoadShedder> loadShedders = new ArrayList<>();
+    public HashMap<LoadShedderType, LoadSheddingFinalResult> compareLoadShedders(Computation computationType, String inputFile){
+        this.errors.clear();
         for (LoadShedderType lsType : LoadShedderType.values()) {
-            loadShedders.add(LoadSheddersFactory.getInstance().getLoadShedder(lsType, inputFile));
-        }
-        for(LoadShedder loadShedder : loadShedders){
-            this.errors.put(loadShedder.getLoadShedderType(), loadShedder.shedLoad());
+            if(computationType.equals(Computation.GLOBAL)) {
+                if(this.loadSheddingService.getLoadSheddingGlobalFinalResult() == null){
+                    loadSheddingService.shedLoad(inputFile, lsType, computationType);
+                }
+                this.errors.put(lsType, this.loadSheddingService.getLoadSheddingGlobalFinalResult());
+            }else{
+                this.errors.put(lsType, loadSheddingService.shedLoad(inputFile, lsType, computationType));
+            }
         }
         return this.errors;
     }

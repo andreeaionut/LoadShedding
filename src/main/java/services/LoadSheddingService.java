@@ -1,51 +1,115 @@
 package services;
 
 import core.Computation;
+import core.GlobalResult;
 import core.LoadShedderType;
+import core.LoadSheddingFinalResult;
 import loadshedders.LoadShedder;
 import loadshedders.LoadShedderComparator;
 import managers.LoadSheddersFactory;
 import managers.TimestampLoadSheddersFactory;
 import timestamp.LoadShedderTS;
+import utils.Utils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class LoadSheddingService {
 
-    private List<Double> globalErrors = new ArrayList<>();
-    private HashMap<Integer, List<Double>> timestampErrors = new HashMap<>();
-    private HashMap<Integer, Double> resultsPerPercent = new HashMap<>();
-    private HashMap<LoadShedderType, List<Double>> comparatorErrors;
+    private HashMap<Integer, GlobalResult> globalResults = new HashMap<>();
+    private HashMap<Integer, GlobalResult> resultsPerPercent = new HashMap<>();
+    private HashMap<LoadShedderType, LoadSheddingFinalResult> comparatorErrors;
+
+    private LoadSheddingFinalResult loadSheddingTimestampRandomFinalResult;
+    private LoadSheddingFinalResult loadSheddingTimestampSemanticFinalResult;
+
+    private LoadSheddingFinalResult loadSheddingGlobalRandomFinalResult;
+    private LoadSheddingFinalResult loadSheddingGlobalSemanticFinalResult;
+
+    private LoadSheddingFinalResult loadSheddingGlobalFinalResult;
+
+    private LoadShedderComparator loadShedderComparator;
 
     public LoadSheddingService() {
+        this.loadShedderComparator = new LoadShedderComparator(this);
+        this.comparatorErrors = new HashMap<>();
     }
 
-    public void shedLoad(String inputFile, LoadShedderType loadShedderType, Computation computation){
+    public LoadSheddingFinalResult shedLoad(String inputFile, LoadShedderType loadShedderType, Computation computation){
         if(computation.equals(Computation.GLOBAL)){
-            LoadShedder loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
-            globalErrors = loadShedder.shedLoad();
+            switch(loadShedderType){
+                case RANDOM:
+                {
+                    if(this.loadSheddingGlobalRandomFinalResult == null){
+                        LoadShedder loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
+                        globalResults = loadShedder.shedLoad();
+                        this.loadSheddingGlobalRandomFinalResult = new LoadSheddingFinalResult();
+                        this.loadSheddingGlobalRandomFinalResult.setLoadSheddedResults(globalResults);
+                    }
+                    return this.loadSheddingGlobalRandomFinalResult;
+                }
+                case SEMANTIC:
+                {
+                    if(this.loadSheddingGlobalSemanticFinalResult == null){
+                        LoadShedder loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
+                        globalResults = loadShedder.shedLoad();
+                        this.loadSheddingGlobalSemanticFinalResult = new LoadSheddingFinalResult();
+                        this.loadSheddingGlobalSemanticFinalResult.setLoadSheddedResults(globalResults);
+                    }
+                    return this.loadSheddingGlobalSemanticFinalResult;
+                }
+            }
+            //this.loadSheddingGlobalFinalResult.setStandardResults(loadShedder.getStandardResult());
         }else{
-            LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
-            this.timestampErrors = loadShedderTS.shedLoad();
-            this.resultsPerPercent = loadShedderTS.getResultsPerPercent();
+            switch(loadShedderType){
+                case RANDOM:
+                {
+                    if(this.loadSheddingTimestampRandomFinalResult == null){
+                        LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
+                        loadShedderTS.shedLoad();
+                        this.resultsPerPercent = loadShedderTS.getResultsPerPercent();
+                        this.loadSheddingTimestampRandomFinalResult = new LoadSheddingFinalResult();
+                        this.loadSheddingTimestampRandomFinalResult.setLoadShedderType(loadShedderType);
+                        this.loadSheddingTimestampRandomFinalResult.setLoadSheddedResults(Utils.copyGlobalResultsReportHashmap(resultsPerPercent));
+                    }
+                    return this.loadSheddingTimestampRandomFinalResult;
+                }
+                case SEMANTIC:
+                {
+                    if(this.loadSheddingTimestampSemanticFinalResult == null){
+                        LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
+                        loadShedderTS.shedLoad();
+                        this.resultsPerPercent = loadShedderTS.getResultsPerPercent();
+                        this.loadSheddingTimestampSemanticFinalResult = new LoadSheddingFinalResult();
+                        this.loadSheddingTimestampSemanticFinalResult.setLoadShedderType(loadShedderType);
+                        this.loadSheddingTimestampSemanticFinalResult.setLoadSheddedResults(Utils.copyGlobalResultsReportHashmap(resultsPerPercent));
+                    }
+                    return this.loadSheddingTimestampSemanticFinalResult;
+                }
+            }
+            //this.loadSheddingTimestampFinalResult.setStandardResults(loadShedderTS.getStandardResults());
         }
+        return null;
     }
 
-    public HashMap<LoadShedderType, List<Double>> compareLoadShedders(String inputFile){
-        return LoadShedderComparator.getInstance().compareLoadShedders(inputFile);
+    public void compareLoadShedders(Computation computationType, String inputFile){
+        if(this.comparatorErrors.size() == 0)
+            this.comparatorErrors = this.loadShedderComparator.compareLoadShedders(computationType, inputFile);
     }
 
-    public HashMap<Integer, List<Double>> getTimestampErrors() {
-        return timestampErrors;
+    public HashMap<LoadShedderType, LoadSheddingFinalResult> getComparatorErrors(){
+        return this.comparatorErrors;
     }
 
-    public List<Double> getGlobalErrors() {
-        return globalErrors;
+    public HashMap<Integer, GlobalResult> getGlobalResults() {
+        return globalResults;
     }
 
-    public HashMap<Integer, Double> getResultsPerPercent() {
+    public HashMap<Integer, GlobalResult> getResultsPerPercent() {
         return resultsPerPercent;
+    }
+
+    public LoadSheddingFinalResult getLoadSheddingGlobalFinalResult() {
+        return loadSheddingGlobalFinalResult;
     }
 }

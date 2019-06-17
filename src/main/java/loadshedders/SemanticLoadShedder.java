@@ -5,6 +5,7 @@ import core.LoadShedderType;
 import core.Measurement;
 import core.SoldierStatusReport;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class SemanticLoadShedder extends LoadShedder {

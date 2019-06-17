@@ -26,7 +26,7 @@ public class SemanticLoadShedderTS extends LoadShedderTS {
 
     @Override
     public void dropTuples(int dropPercent, List<Soldier> soldiers) {
-        int valuesDropped = Math.round(soldiers.size() * dropPercent / 100);
+        int valuesDropped = Math.round((soldiers.size() * dropPercent) / 100);
         for(int counter = 0; counter < valuesDropped; counter++){
             int semanticIndex = this.getSemanticIndex(soldiers);
             soldiers.remove(semanticIndex);

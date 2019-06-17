@@ -1,48 +1,45 @@
 package managers;
 
 import core.*;
+import utils.CpuLoad;
+import utils.Utils;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LoadSheddingManager {
 
     private List<Soldier> data;
-    private HashMap<Integer, SoldierStatusReport> results = new HashMap<Integer, SoldierStatusReport>();
+    private HashMap<Integer, SoldierStatusReport> standardResults = new HashMap<Integer, SoldierStatusReport>();
+    private GlobalResult globalResult;
 
     private String inputFile;
 
     public LoadSheddingManager(String inputFile) {
         this.inputFile = inputFile;
         this.data = FileManager.getDataFromFile(inputFile);
-    }
-
-    public int getDataSize(){
-        if(this.data == null){
-            return 0;
-        }
-        return this.data.size();
+        createStandardResults();
+        this.globalResult = this.getStandardGlobalResult();
     }
 
     public HashMap<Integer, SoldierStatusReport> getStandardResults(){
-        List<Soldier> soldiers = FileManager.getDataFromFile(this.inputFile);
-        return this.getResultsFromList(soldiers);
+        return this.standardResults;
+    }
+
+    private void createStandardResults(){
+        this.standardResults = this.getResultsFromList(this.data);
     }
 
     private HashMap<Integer, SoldierStatusReport> getResultsFromList(List<Soldier> soldiers){
-        while(soldiers.size() > 0){
-            Soldier soldier = soldiers.get(0);
+        for(Soldier soldier : soldiers){
             SoldierStatusReport soldierStatusReport;
-            if(!results.containsKey(soldier.getId())){
+            if(!standardResults.containsKey(soldier.getId())){
                 soldierStatusReport = new SoldierStatusReport();
                 soldierStatusReport.setId(soldier.getId());
                 soldierStatusReport.setNumberOfValues(1);
-                soldierStatusReport.setSumOfBodyTemperature(soldier.getBodyTemperature());
+                //soldierStatusReport.setSumOfBodyTemperature(soldier.getBodyTemperature());
             }else{
-                soldierStatusReport = results.get(soldier.getId());
-                soldierStatusReport.setSumOfBodyTemperature(soldierStatusReport.getSumOfBodyTemperature() + soldier.getBodyTemperature());
+                soldierStatusReport = standardResults.get(soldier.getId());
+                //soldierStatusReport.setSumOfBodyTemperature(soldierStatusReport.getSumOfBodyTemperature() + soldier.getBodyTemperature());
                 soldierStatusReport.setNumberOfValues(soldierStatusReport.getNumberOfValues() + 1);
             }
             BodyTemperatureMeasurement measurement = new BodyTemperatureMeasurement();
@@ -51,15 +48,22 @@ public class LoadSheddingManager {
             measurement.setValue(bodyTemperature);
             measurement.setImportance(bodyTemperature);
             soldierStatusReport.addMeasurement(measurement);
-            results.put(soldier.getId(), soldierStatusReport);
-            soldiers.remove(0);
+            standardResults.put(soldier.getId(), soldierStatusReport);
         }
         HashMap<Integer, SoldierStatusReport> finalResults = new HashMap<Integer, SoldierStatusReport>();
-        Iterator it = this.results.entrySet().iterator();
+        Iterator it = this.standardResults.entrySet().iterator();
+        float smoothLoad = 0;
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             SoldierStatusReport soldierStatusReport = (SoldierStatusReport) pair.getValue();
+            long lastTime = System.nanoTime();
+            long lastThreadTime = CpuLoad.getInstance().getThreadMXBean().getCurrentThreadCpuTime();
             this.setStatusReportResults(soldierStatusReport);
+            long time = System.nanoTime();
+            long threadTime = CpuLoad.getInstance().getThreadMXBean().getCurrentThreadCpuTime();
+            double dt = (threadTime - lastThreadTime) / (double)(time - lastTime);
+            smoothLoad += (dt - smoothLoad) * 0.4;
+            soldierStatusReport.setStandardCalculationTime(smoothLoad);
             finalResults.put(soldierStatusReport.getId(), soldierStatusReport);
             it.remove();
         }
@@ -67,7 +71,7 @@ public class LoadSheddingManager {
     }
 
     public void setStatusReportResults(SoldierStatusReport soldierStatusReport){
-        soldierStatusReport.setMean(soldierStatusReport.getSumOfBodyTemperature()/soldierStatusReport.getNumberOfValues());
+        soldierStatusReport.setMean(soldierStatusReport.getMean());
         double standardDeviation = this.getStandardDeviation(soldierStatusReport.getMeasurements(), soldierStatusReport.getMean());
         soldierStatusReport.setStandardDeviation(standardDeviation);
     }
@@ -82,21 +86,45 @@ public class LoadSheddingManager {
         return standardDeviation;
     }
 
-    private double getGlobalMean(HashMap<Integer, SoldierStatusReport> standardResults) {
+    public List<Integer> getSoldiersIdsRange(HashMap<Integer, SoldierStatusReport> soldiers){
+        HashMap<Integer, SoldierStatusReport> standardResultsCopy = Utils.copySoldierStatusReportHashmap(soldiers);
+        Iterator it = standardResultsCopy.entrySet().iterator();
+        int lastId = 0;
+        int firstId = Integer.MAX_VALUE;
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            int id = (int) pair.getKey();
+            if(id>lastId){
+                lastId = id;
+            }
+            if(id < firstId){
+                firstId = id;
+            }
+            it.remove();
+        }
+        List<Integer> ids = new ArrayList<>();
+        ids.add(firstId);
+        ids.add(lastId);
+        return ids;
+    }
+
+    public double getGlobalMean(HashMap<Integer, SoldierStatusReport> standardResults) {
         double globalSumOfMeans = 0;
         double values = 0;
-        Iterator it = standardResults.entrySet().iterator();
+        HashMap<Integer, SoldierStatusReport> standardResultsCopy = Utils.copySoldierStatusReportHashmap(standardResults);
+        Iterator it = standardResultsCopy.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             SoldierStatusReport soldierStatusReport = (SoldierStatusReport) pair.getValue();
             globalSumOfMeans += soldierStatusReport.getMean();
-            it.remove();
             values++;
+            it.remove();
         }
         return globalSumOfMeans / values;
     }
 
-    private double getGlobalStandardDeviation(double mean, HashMap<Integer, SoldierStatusReport> standardResults) {
+    public double getGlobalStandardDeviation(double mean, HashMap<Integer, SoldierStatusReport> standardResults) {
         double globalStandardDeviation = 0;
         double values = 0;
         Iterator it = standardResults.entrySet().iterator();
@@ -107,15 +135,14 @@ public class LoadSheddingManager {
             it.remove();
             values++;
         }
-        globalStandardDeviation = globalStandardDeviation / values;
+        globalStandardDeviation = Math.sqrt(globalStandardDeviation / values);
         return globalStandardDeviation;
     }
 
     public GlobalResult getStandardGlobalResult() {
-        HashMap<Integer, SoldierStatusReport> results = this.getStandardResults();
+        HashMap<Integer, SoldierStatusReport> results = Utils.copySoldierStatusReportHashmap(this.standardResults);
         return this.calculateGlobalResultFromHashMap(results);
     }
-
 
     public GlobalResult calculateGlobalResultFromHashMap(HashMap<Integer, SoldierStatusReport> results){
         double mean = this.getGlobalMean(results);
@@ -126,4 +153,28 @@ public class LoadSheddingManager {
         return globalResult;
     }
 
+    public HashMap<Integer,GlobalResult> getStandardResult() {
+        HashMap<Integer, GlobalResult> result = new HashMap<>();
+        HashMap<Integer, SoldierStatusReport> results = Utils.copySoldierStatusReportHashmap(this.standardResults);
+
+        Iterator it = results.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Integer percent = (Integer) pair.getKey();
+            SoldierStatusReport soldierStatusReport = (SoldierStatusReport) pair.getValue();
+            GlobalResult globalResult = new GlobalResult();
+            globalResult.setLoadSheddingPercent(percent);
+            globalResult.setStandardDeviation(soldierStatusReport.getStandardDeviation());
+            globalResult.setMean(soldierStatusReport.getMean());
+            globalResult.setStandardCalculationTime(soldierStatusReport.getStandardCalculationTime());
+            result.put(percent, globalResult);
+            it.remove();
+        }
+
+        return result;
+    }
+
+    public GlobalResult getGlobalResult() {
+        return globalResult;
+    }
 }

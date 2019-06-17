@@ -13,6 +13,11 @@
     -fx-effect: dropshadow( gaussian , rgba(214, 66, 20, 0.5), 0,0,0,1 );
 }
 
+#labelChooseChart{
+    -fx-font-weight: bold;
+    -fx-text-fill: #2A5058;
+}
+
 .table-row-cell{
     -fx-font-family: "Georgia";
     -fx-background-color: #FFE4E1;
@@ -96,7 +101,7 @@
 
 }
 
-#apTable{
+#anchorPaneChartMenu{
     -fx-background-color: #2A5058;
 }
 
@@ -106,43 +111,15 @@
 
 .text-field{
     -fx-background-color: 	#ADD8E6;
-    -fx-text-fill: #2A5058;
+    -fx-text-fill: white;
     -fx-font-family: "Georgia";
     -fx-font-size: 0.4cm;
 }
 
 .radio-button{
     -fx-font-family: "Georgia";
-    -fx-text-fill: #2F4F4F;
-    -fx-font-size: 0.5cm;
-}
-
-#lblSort{
-    -fx-text-fill: #9fdce3;
-    -fx-font-size: 0.5cm;
-    -fx-font-style: italic;
-}
-
-#labelLogin, #labelCreateAccount, #labelWelcome{
     -fx-text-fill: whitesmoke;
     -fx-font-size: 0.5cm;
-    -fx-font-family: "Georgia";
-}
-
-#labelUsername, #labelPassword, #labelNewUsername, #labelNewPassword, #labelConfirmPassword{
-    -fx-text-fill: whitesmoke;
-    -fx-font-size: 0.4cm;
-    -fx-font-family: "Georgia";
-}
-
-#labelStudProf, #labelEditStudent, #labelGradesSituation{
-    -fx-text-fill: whitesmoke;
-    -fx-font-size: 0.5cm;
-    -fx-font-family: "Georgia";
-}
-
-#stackPaneGradeReport{
-    -fx-background-color: #cee1e3;
 }
 
 .AnchorPane{
@@ -168,19 +145,22 @@
     -fx-border-width: 5;
 }
 
-#gradesStackPane{
-    -fx-border-color: #cee1e3;
-    -fx-border-width:3;
-}
-
-#labelUserName, #labelUserGroup, #labelUserTeacher{
-    -fx-text-fill: whitesmoke;
-    -fx-font-size: 0.3cm;
-    -fx-font-family: "Georgia";
-}
-
 #labelInvalidData, #labelInvalidNewData{
     -fx-text-fill: #e38083;
-    -fx-font-size: 0.4cm;
+    -fx-font-size: 20px;
     -fx-font-family: "Georgia";
+}
+
+
+#labelChooseChart{
+    -fx-text-fill: whitesmoke;
+}
+
+#mainAnchorPane{
+    -fx-background-color: #2A5058;
+}
+
+#txtUploadedFile{
+    -fx-text-fill: white;
+    -fx-background-color: darkcyan;
 }

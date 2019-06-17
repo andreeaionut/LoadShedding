@@ -1,7 +1,6 @@
 package timestamp;
 
 import core.*;
-import loadshedders.LoadShedder;
 
 import java.util.List;
 import java.util.Random;
@@ -14,7 +13,7 @@ public class RandomLoadShedderTS extends LoadShedderTS {
 
     @Override
     public void dropTuples(int dropPercent, List<Soldier> soldiers) {
-        int valuesDropped = Math.round(soldiers.size() * dropPercent / 100);
+        int valuesDropped = Math.round((soldiers.size() * dropPercent) / 100);
         int size;
         Random random = new Random();
         for(int counter = 0; counter < valuesDropped; counter++){

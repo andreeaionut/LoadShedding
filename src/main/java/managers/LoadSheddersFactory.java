@@ -1,11 +1,9 @@
 package managers;
 
-import core.Computation;
 import core.LoadShedderType;
 import loadshedders.LoadShedder;
 import loadshedders.RandomLoadShedder;
 import loadshedders.SemanticLoadShedder;
-import timestamp.RandomLoadShedderTS;
 
 public class LoadSheddersFactory {
 

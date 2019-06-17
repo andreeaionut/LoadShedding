@@ -49,6 +49,7 @@ public class Main extends Application {
         Parent root = loader.load();
 
         MainController controller = loader.getController();
+        stage.setTitle("Load Shedding Investigation");
         controller.setStage(stage);
 
         scene = new Scene(root,width,height);

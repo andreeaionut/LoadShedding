@@ -1,9 +1,11 @@
 package timestamp;
 
+import com.sun.management.OperatingSystemMXBean;
 import core.GlobalResult;
 import core.LoadShedderType;
 import core.Soldier;
 import managers.TimestampLSManager;
+import utils.CpuLoad;
 import utils.Utils;
 
 import java.util.*;
@@ -13,36 +15,60 @@ public abstract class LoadShedderTS {
     private static int LS_PERCENT_STEP_SIZE = 10;
     private static int MAX_LS_PERCENT = 90;
 
-    protected TimestampLSManager loadSheddingManager;
+    private TimestampLSManager loadSheddingManager;
     private HashMap<Integer, GlobalResult> standardResults;
-    HashMap<Integer, List<Double>> loadSheddedResults;
+    private HashMap<Integer, List<GlobalResult>> loadSheddedResults;
     private HashMap<Integer, List<Soldier>> data;
     protected LoadShedderType loadShedderType;
 
     public LoadShedderTS(String inputFile){
         this.loadSheddingManager = new TimestampLSManager(inputFile);
-        this.standardResults = this.loadSheddingManager.getStandardResults();
+        this.standardResults = this.loadSheddingManager.createStandardResults();
         this.data = this.loadSheddingManager.getData();
     }
 
     public abstract void dropTuples(int dropPercent, List<Soldier> soldiers);
 
-    public HashMap<Integer, List<Double>> shedLoad(){
-        HashMap<Integer, List<Double>> loadSheddedResults = new HashMap<>();
-        HashMap<Integer, GlobalResult> resultsBeforeLoadShedding = this.standardResults;
+    public HashMap<Integer, GlobalResult> getStandardResults(){
+        return this.loadSheddingManager.getStandardResults();
+    }
 
+    public HashMap<Integer, List<GlobalResult>> shedLoad(){
+        System.out.println("load shedding...");
+        HashMap<Integer, List<GlobalResult>> loadSheddedResults = new HashMap<>();
+        HashMap<Integer, GlobalResult> resultsBeforeLoadShedding = Utils.copyGlobalResultsReportHashmap(this.standardResults);
         Iterator it = resultsBeforeLoadShedding.entrySet().iterator();
+        float smoothLoad = 0;
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             int currentLoadSheddingPercent = LS_PERCENT_STEP_SIZE;
             int timestamp = (int) pair.getKey();
-            List<Double> errorsPerTimestamp = new ArrayList<>();
+            List<GlobalResult> errorsPerTimestamp = new ArrayList<>();
             while(currentLoadSheddingPercent <= MAX_LS_PERCENT){
                 List<Soldier> beforeLS = this.data.get(timestamp);
                 dropTuples(currentLoadSheddingPercent, beforeLS);
+                //long begin = System.currentTimeMillis();
+                long lastTime = System.nanoTime();
+                long lastThreadTime = CpuLoad.getInstance().getThreadMXBean().getCurrentThreadCpuTime();
+
                 double mean = getMean(beforeLS);
-                double error = Math.abs( this.standardResults.get(timestamp).getMean() - mean);
-                errorsPerTimestamp.add(error);
+                double meanError = Math.abs(mean - this.standardResults.get(timestamp).getMean());
+                double standardDeviation = this.standardResults.get(timestamp).getStandardDeviation();
+                double standardDeviationError = Math.abs(this.loadSheddingManager.getStandardDeviation(beforeLS, mean) - standardDeviation);
+
+                //long end = System.currentTimeMillis();
+                //long dt = (end - begin);
+                long time = System.nanoTime();
+                long threadTime = CpuLoad.getInstance().getThreadMXBean().getCurrentThreadCpuTime();
+                double dt = (threadTime - lastThreadTime) / (double)(time - lastTime);
+                smoothLoad += (dt - smoothLoad) * 0.4;
+
+                GlobalResult globalResult = new GlobalResult();
+                globalResult.setMean(meanError);
+                globalResult.setStandardDeviation(standardDeviationError);
+                globalResult.setLsCalculationTime(smoothLoad);
+                globalResult.setLoadSheddingPercent(currentLoadSheddingPercent);
+                errorsPerTimestamp.add(globalResult);
                 currentLoadSheddingPercent += LS_PERCENT_STEP_SIZE;
             }
             it.remove();
@@ -52,18 +78,28 @@ public abstract class LoadShedderTS {
         return loadSheddedResults;
     }
 
-    public HashMap<Integer, Double> getResultsPerPercent(){
-        HashMap<Integer, Double> result = new HashMap<>();
+    public HashMap<Integer, GlobalResult> getResultsPerPercent(){
+        HashMap<Integer, GlobalResult> result = new HashMap<>();
         int currentPercent = LS_PERCENT_STEP_SIZE;
         while(currentPercent <= MAX_LS_PERCENT) {
-            double sum = 0;
+            double meanSum = 0;
+            double stdDevSum = 0;
             int values = 0;
-            for (Map.Entry<Integer, List<Double>> entry : this.loadSheddedResults.entrySet()) {
-                sum += entry.getValue().get(currentPercent/10 - 1);
+            double timeConsumed = 0;
+            for (Map.Entry<Integer, List<GlobalResult>> entry : this.loadSheddedResults.entrySet()) {
+                meanSum += entry.getValue().get(currentPercent/10 - 1).getMean();
+                stdDevSum += entry.getValue().get(currentPercent/10 - 1).getStandardDeviation();
+                timeConsumed += entry.getValue().get(currentPercent/10 - 1).getLsCalculationTime();
                 values++;
             }
-            double meanError = sum / values;
-            result.put(currentPercent, meanError);
+            double mean = meanSum / values;
+            double stdDev = stdDevSum / values;
+            GlobalResult globalResult = new GlobalResult();
+            globalResult.setMean(mean);
+            globalResult.setStandardDeviation(stdDev);
+            globalResult.setLsCalculationTime(timeConsumed);
+            globalResult.setLoadSheddingPercent(currentPercent);
+            result.put(currentPercent, globalResult);
             currentPercent += LS_PERCENT_STEP_SIZE;
         }
         return result;
@@ -79,5 +115,7 @@ public abstract class LoadShedderTS {
         return sum/values;
     }
 
-
+    public LoadShedderType getLoadShedderType(){
+        return this.loadShedderType;
+    }
 }

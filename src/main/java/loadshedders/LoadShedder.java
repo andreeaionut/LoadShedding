@@ -4,6 +4,7 @@ import core.GlobalResult;
 import core.LoadShedderType;
 import core.SoldierStatusReport;
 import managers.LoadSheddingManager;
+import utils.Utils;
 
 import java.util.*;
 
@@ -13,58 +14,69 @@ public abstract class LoadShedder {
     private static int MAX_LS_PERCENT = 90;
 
     LoadSheddingManager loadSheddingManager;
-    private HashMap<Integer, SoldierStatusReport> standardResults;
-    private GlobalResult globalResult;
     protected LoadShedderType loadShedderType;
 
-    public LoadShedder(){}
+    private HashMap<Integer, SoldierStatusReport> standardResults;
+    private HashMap<Integer, GlobalResult> loadSheddedResults;
+    private GlobalResult globalResult;
+
+    public LoadShedder(){
+        this.standardResults = this.loadSheddingManager.getStandardResults();
+    }
 
     LoadShedder(String inputFile){
         this.loadSheddingManager = new LoadSheddingManager(inputFile);
         this.standardResults = this.loadSheddingManager.getStandardResults();
-        this.globalResult = this.loadSheddingManager.getStandardGlobalResult();
-    }
-
-    private void compareResults(int loadSheddingValue, HashMap<Integer, SoldierStatusReport> results){
-        Iterator it = results.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            SoldierStatusReport soldierStatusReportLS = (SoldierStatusReport) pair.getValue();
-            SoldierStatusReport soldierStatusReportStandard = this.standardResults.get(pair.getKey());
-            double error = Math.abs(soldierStatusReportStandard.getMean() - soldierStatusReportLS.getMean());
-            System.out.println("LS " + loadSheddingValue + " % ID " + soldierStatusReportLS.getId() + " Mean error: " + error);
-            it.remove();
-        }
+        this.globalResult = this.loadSheddingManager.getGlobalResult();
     }
 
     protected abstract void dropTuples(int dropPercent, SoldierStatusReport soldierStatusReport);
 
-    public List<Double> shedLoad(){
-        List<Double> errors = new ArrayList<>();
+    public HashMap<Integer, GlobalResult> getStandardResult(){
+        return this.loadSheddingManager.getStandardResult();
+    }
+
+    public HashMap<Integer, GlobalResult> shedLoad(){
+        HashMap<Integer, GlobalResult> errors = new HashMap<>();
 
         HashMap<Integer, SoldierStatusReport> resultsBeforeLoadShedding;
         HashMap<Integer, SoldierStatusReport> loadSheddedResults;
         int currentLoadSheddingPercent = LS_PERCENT_STEP_SIZE;
         System.out.println("Global standard mean: " + this.globalResult.getMean());
+
         while(currentLoadSheddingPercent <= MAX_LS_PERCENT){
-            loadSheddedResults = new HashMap<Integer, SoldierStatusReport>();
-            resultsBeforeLoadShedding = loadSheddingManager.getStandardResults();
+            loadSheddedResults = new HashMap<>();
+            resultsBeforeLoadShedding = Utils.copySoldierStatusReportHashmap(this.standardResults);
             Iterator it = resultsBeforeLoadShedding.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
+                Integer soldierId = (Integer) pair.getKey();
                 SoldierStatusReport soldierStatusReport = (SoldierStatusReport) pair.getValue();
-                int valuesDropped = Math.round(soldierStatusReport.getNumberOfValues() * currentLoadSheddingPercent / 100);
-                this.dropTuples(valuesDropped, soldierStatusReport);
-                loadSheddedResults.put((Integer) pair.getKey(), soldierStatusReport);
+                int droppedValues = (soldierStatusReport.getMeasurements().size() * currentLoadSheddingPercent) / 100;
+                this.dropTuples(droppedValues, soldierStatusReport);
+                loadSheddedResults.put(soldierId, soldierStatusReport);
                 it.remove();
             }
-            //this.compareResults(currentLoadSheddingPercent, loadSheddedResults);
+            long begin = System.currentTimeMillis();
+
             GlobalResult loadSheddedGlobalResult = this.loadSheddingManager.calculateGlobalResultFromHashMap(loadSheddedResults);
-            double error = Math.abs(this.globalResult.getMean() - loadSheddedGlobalResult.getMean());
-            System.out.println("LS " + currentLoadSheddingPercent + " % " + " Mean error: " + error);
-            errors.add(error);
+            //double mean = this.loadSheddingManager.getGlobalMean(loadSheddedResults);
+            //double stddev = this.loadSheddingManager.getGlobalStandardDeviation(mean, loadSheddedResults);
+            double meanError = Math.abs(loadSheddedGlobalResult.getMean() - this.globalResult.getMean());
+            double stdDevError = Math.abs(loadSheddedGlobalResult.getStandardDeviation() - this.globalResult.getStandardDeviation());
+
+            long end = System.currentTimeMillis();
+            long ts = (end - begin);
+
+            //GlobalResult loadSheddedGlobalResult = new GlobalResult();
+            loadSheddedGlobalResult.setMean(meanError);
+            loadSheddedGlobalResult.setStandardDeviation(stdDevError);
+            loadSheddedGlobalResult.setLsCalculationTime(ts);
+            loadSheddedGlobalResult.setLoadSheddingPercent(currentLoadSheddingPercent);
+            errors.put(currentLoadSheddingPercent, loadSheddedGlobalResult);
             currentLoadSheddingPercent += LS_PERCENT_STEP_SIZE;
         }
+        this.loadSheddedResults = errors;
         return errors;
     }
 

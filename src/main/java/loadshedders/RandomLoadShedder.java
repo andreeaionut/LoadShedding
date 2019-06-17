@@ -15,10 +15,10 @@ public class RandomLoadShedder extends LoadShedder {
     }
 
     @Override
-     protected void dropTuples(int dropPercent, SoldierStatusReport soldierStatusReport){
+     protected void dropTuples(int valuesDropped, SoldierStatusReport soldierStatusReport){
         int size;
         Random random = new Random();
-        for(int counter = 0; counter < dropPercent; counter++){
+        for(int counter = 0; counter < valuesDropped; counter++){
             size = soldierStatusReport.getNumberOfValues();
             int randomIndex = random.nextInt(size);
             Measurement<Double> bodyTemperatureMeasurement = (BodyTemperatureMeasurement) soldierStatusReport.getMeasurements().remove(randomIndex);

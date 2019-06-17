@@ -1,19 +1,21 @@
 package controllers;
 
+import core.GlobalResult;
 import core.LoadShedderType;
+import core.LoadSheddingFinalResult;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
+import utils.Utils;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -43,147 +45,191 @@ public class ChartController {
         });
     }
 
-    public void initComparatorView(HashMap<LoadShedderType, List<Double>> comparatorErrors){
+    public void initAllChartsView(LoadShedderType loadShedderType, LoadSheddingFinalResult loadSheddedResult){
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Load Shedding Percent");
-
         lineChart = new LineChart(xAxis, yAxis);
-
-        lineChart.setTitle("Load Shedding Mean Error");
+        lineChart.setTitle("Load Shedding Errors");
 
         List<XYChart.Series> series = new ArrayList<>();
 
-        Iterator it = comparatorErrors.entrySet().iterator();
+        HashMap<Integer, GlobalResult> lsResults = Utils.copyGlobalResultsReportHashmap(loadSheddedResult.getLoadSheddedResults());
+        Iterator it = lsResults.entrySet().iterator();
+        XYChart.Series meanSeries = new XYChart.Series();
+        XYChart.Series stddevSeries = new XYChart.Series();
+
+        meanSeries.setName("Mean error");
+        stddevSeries.setName("Standard deviation error");
+
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            XYChart.Series newSeries = new XYChart.Series();
-            newSeries.setName(pair.getKey().toString());
-            List<Double> errors = (List<Double>) pair.getValue();
-            for(int percent = 10; percent<=90; percent+=10){
-                newSeries.getData().add(new XYChart.Data(percent, errors.get((percent/10)-1)));
-            }
-            series.add(newSeries);
+            GlobalResult globalResult = (GlobalResult) pair.getValue();
+            meanSeries.getData().add(new XYChart.Data(pair.getKey(), globalResult.getMean()));
+            stddevSeries.getData().add(new XYChart.Data(pair.getKey(), globalResult.getStandardDeviation()));
             it.remove();
         }
+
+        series.add(meanSeries);
+        series.add(stddevSeries);
 
         for(XYChart.Series seriesToAdd : series){
             lineChart.getData().add(seriesToAdd);
         }
-
         btnExport.setLayoutX(550);
         btnExport.setLayoutY(350);
-        //Creating a Group object
         Group root = new Group(lineChart, btnExport);
 
-        //Creating a scene object
         Scene scene = new Scene(root, 700, 400);
         String css = ChartController.class.getResource("../style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
 
-        //Setting title to the Stage
-        stage.setTitle("Line Chart");
-
-        //Adding scene to the stage
+        stage.setTitle("Global " + loadShedderType.toString() + " Load Shedder");
         stage.setScene(scene);
-
-        //Displaying the contents of the stage
         stage.show();
-
     }
 
-    public void initView(List<Double> errors){
-        //Defining the x axis
+    public void initComparatorView(String chartType, HashMap<LoadShedderType, LoadSheddingFinalResult> comparatorErrors){
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Load Shedding Percent");
+        lineChart = new LineChart(xAxis, yAxis);
+        lineChart.setTitle("Load Shedding " + chartType + " error");
+        List<XYChart.Series> series = new ArrayList<>();
+        Iterator it = Utils.copyHashMap(comparatorErrors).entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            XYChart.Series newSeries = new XYChart.Series();
+            newSeries.setName(pair.getKey().toString());
+            LoadSheddingFinalResult loadSheddingFinalResult = (LoadSheddingFinalResult) pair.getValue();
+            HashMap<Integer, GlobalResult> loadSheddedResults = loadSheddingFinalResult.getLoadSheddedResults();
+            for(int percent = 10; percent<=90; percent+=10){
+                newSeries.getData().add(new XYChart.Data(percent, loadSheddedResults.get(percent).getValue(chartType)));
+            }
+            series.add(newSeries);
+            it.remove();
+        }
+        for(XYChart.Series seriesToAdd : series){
+            lineChart.getData().add(seriesToAdd);
+        }
+        btnExport.setLayoutX(550);
+        btnExport.setLayoutY(350);
+        Group root = new Group(lineChart, btnExport);
+
+        Scene scene = new Scene(root, 700, 400);
+        String css = ChartController.class.getResource("../style.css").toExternalForm();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(css);
+
+        stage.setTitle("Comparing Load Shedders");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    void initView(String chartType, LoadShedderType loadShedderType, LoadSheddingFinalResult loadSheddingFinalResult){
         NumberAxis xAxis = new NumberAxis(0, 100, 10);
         xAxis.setLabel("Load Shedding Percent");
-
-        //Defining the y axis
-        NumberAxis yAxis = new NumberAxis   (0.0, 1.0, 0.1);
+        NumberAxis yAxis = new NumberAxis   ();
         yAxis.setLabel("Mean error");
-
-        //Creating the line chart
         lineChart = new LineChart(xAxis, yAxis);
-
-        //Prepare XYChart.Series objects by setting data
         XYChart.Series series = new XYChart.Series();
-        series.setName("Load shedding error evolution");
-
-        series.getData().add(new XYChart.Data(10, errors.get(0)));
-        series.getData().add(new XYChart.Data(20, errors.get(1)));
-        series.getData().add(new XYChart.Data(30, errors.get(2)));
-        series.getData().add(new XYChart.Data(40, errors.get(3)));
-        series.getData().add(new XYChart.Data(50, errors.get(4)));
-        series.getData().add(new XYChart.Data(60, errors.get(5)));
-        series.getData().add(new XYChart.Data(70, errors.get(6)));
-        series.getData().add(new XYChart.Data(80, errors.get(7)));
-        series.getData().add(new XYChart.Data(90, errors.get(8)));
-
-        //Setting the data to Line chart
+        HashMap<Integer, GlobalResult> lsResults = loadSheddingFinalResult.getLoadSheddedResults();
+        series.setName(loadShedderType.toString() + " Load shedder error evolution");
+        series.getData().add(new XYChart.Data(10, lsResults.get(10).getValue(chartType)));
+        series.getData().add(new XYChart.Data(20, lsResults.get(20).getValue(chartType)));
+        series.getData().add(new XYChart.Data(30, lsResults.get(30).getValue(chartType)));
+        series.getData().add(new XYChart.Data(40, lsResults.get(40).getValue(chartType)));
+        series.getData().add(new XYChart.Data(50, lsResults.get(50).getValue(chartType)));
+        series.getData().add(new XYChart.Data(60, lsResults.get(60).getValue(chartType)));
+        series.getData().add(new XYChart.Data(70, lsResults.get(70).getValue(chartType)));
+        series.getData().add(new XYChart.Data(80, lsResults.get(80).getValue(chartType)));
+        series.getData().add(new XYChart.Data(90, lsResults.get(90).getValue(chartType)));
         lineChart.getData().add(series);
-
         btnExport.setLayoutX(550);
         btnExport.setLayoutY(350);
-        //Creating a Group object
         Group root = new Group(lineChart, btnExport);
 
-        //Creating a scene object
         Scene scene = new Scene(root, 700, 400);
         String css = ChartController.class.getResource("../style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
 
-        //Setting title to the Stage
-        stage.setTitle("Line Chart");
-
-        //Adding scene to the stage
+        stage.setTitle("Global " + loadShedderType.toString() + " Load Shedder");
         stage.setScene(scene);
-
-        //Displaying the contents of the stage
         stage.show();
     }
 
-    public void initTimestampView(HashMap<Integer, Double> errors){
-        //Defining the x axis
+    void initTimestampView(String chartType, LoadShedderType loadShedderType, LoadSheddingFinalResult loadSheddedResult){
         NumberAxis xAxis = new NumberAxis(0, 100, 10);
         xAxis.setLabel("Load Shedding Percent");
 
-        //Defining the y axis
         NumberAxis yAxis = new NumberAxis   (0.0, 1.0, 0.1);
         yAxis.setLabel("Mean error");
 
-        //Creating the line chart
         lineChart = new LineChart(xAxis, yAxis);
 
-        //Prepare XYChart.Series objects by setting data
         XYChart.Series series = new XYChart.Series();
         series.setName("Load shedding error evolution");
-
-        for (Map.Entry<Integer, Double> entry : errors.entrySet()) {
-            series.getData().add(new XYChart.Data(entry.getKey(), entry.getValue()));
+        HashMap<Integer, GlobalResult> errors = loadSheddedResult.getLoadSheddedResults();
+        for (Map.Entry<Integer, GlobalResult> entry : errors.entrySet()) {
+            series.getData().add(new XYChart.Data(entry.getKey(), entry.getValue().getValue(chartType)));
         }
 
-        //Setting the data to Line chart
         lineChart.getData().add(series);
 
         btnExport.setLayoutX(550);
         btnExport.setLayoutY(350);
-        //Creating a Group object
         Group root = new Group(lineChart, btnExport);
 
-        //Creating a scene object
         Scene scene = new Scene(root, 700, 400);
         String css = ChartController.class.getResource("../style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
 
-        //Setting title to the Stage
-        stage.setTitle("Line Chart");
-
-        //Adding scene to the stage
+        stage.setTitle("Timestamp " + loadShedderType.toString() + " Load Shedder");
         stage.setScene(scene);
+        stage.show();
+    }
 
-        //Displaying the contents of the stage
+    public void initTimeConsumedView(LoadSheddingFinalResult loadSheddingFinalResult){
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Load Shedding Percent");
+        lineChart = new LineChart(xAxis, yAxis);
+        lineChart.setTitle("Time consumed");
+        List<XYChart.Series> series = new ArrayList<>();
+
+        HashMap<Integer, GlobalResult> loadSheddedResults = Utils.copyGlobalResultsReportHashmap(loadSheddingFinalResult.getLoadSheddedResults());
+        HashMap<Integer, GlobalResult> standardResults = Utils.copyGlobalResultsReportHashmap(loadSheddingFinalResult.getStandardResults());
+
+        Iterator it = loadSheddedResults.entrySet().iterator();
+        XYChart.Series lsSeries = new XYChart.Series();
+        lsSeries.setName("Load shedded TIME");
+
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            Integer percent = (Integer) pair.getKey();
+            GlobalResult globalResult = (GlobalResult) pair.getValue();
+            lsSeries.getData().add(new XYChart.Data(percent, globalResult.getLsCalculationTime()));
+            it.remove();
+        }
+        series.add(lsSeries);
+
+        for(XYChart.Series seriesToAdd : series){
+            lineChart.getData().add(seriesToAdd);
+        }
+        btnExport.setLayoutX(550);
+        btnExport.setLayoutY(350);
+        Group root = new Group(lineChart, btnExport);
+
+        Scene scene = new Scene(root, 700, 400);
+        String css = ChartController.class.getResource("../style.css").toExternalForm();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(css);
+
+        stage.setTitle("Time Consumed Chart");
+        stage.setScene(scene);
         stage.show();
     }
 

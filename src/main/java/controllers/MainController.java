@@ -1,9 +1,13 @@
 package controllers;
 
 import core.Computation;
+import core.GlobalResult;
 import core.LoadShedderType;
+import core.LoadSheddingFinalResult;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -16,15 +20,15 @@ import services.LoadSheddingService;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 public class MainController {
 
     private LoadSheddingService loadSheddingService;
+    private LoadSheddingFinalResult loadSheddingFinalResult;
     private LoadShedderType loadShedderType;
     private Computation computationType;
     private String inputFile;
-    private HashMap<LoadShedderType, List<Double>> comparatorErrors;
+    private HashMap<LoadShedderType, LoadSheddingFinalResult> comparatorErrors;
     
     private Stage stage;
     @FXML
@@ -55,7 +59,6 @@ public class MainController {
     }
 
     public void handleUploadFile(){
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         FileChooser.ExtensionFilter extFilter =
@@ -140,51 +143,40 @@ public class MainController {
         loadShedderType = null;
         computationType = null;
         this.inputFile = this.txtUploadedFile.getText();
-        this.loadSheddingService = new LoadSheddingService();
         if(this.tbtnGlobalComputation.isSelected()){
             computationType = Computation.GLOBAL;
         }else{
             computationType = Computation.TIMESTAMP;
         }
         if(this.tbtnCompare.isSelected()){
-            this.comparatorErrors = this.loadSheddingService.compareLoadShedders(this.inputFile);
+            this.loadSheddingService.compareLoadShedders(computationType, this.inputFile);
             this.btnChart.setDisable(false);
         }else{
             if(this.rbtnRandomLS.isSelected()){
                 loadShedderType = LoadShedderType.RANDOM;
-                this.loadSheddingService.shedLoad(inputFile, loadShedderType, computationType);
-                this.btnChart.setDisable(false);
+                this.loadSheddingFinalResult = this.loadSheddingService.shedLoad(inputFile, loadShedderType, computationType);
             }else{
                 if(this.rbtnSemanticLS.isSelected()){
                     loadShedderType = LoadShedderType.SEMANTIC;
                 }
-                this.loadSheddingService.shedLoad(inputFile, loadShedderType, computationType);
+                this.loadSheddingFinalResult = this.loadSheddingService.shedLoad(inputFile, loadShedderType, computationType);
             }
             this.btnChart.setDisable(false);
         }
     }
 
     public void handleChart(){
+        Parent root;
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("../ChartView.fxml"));
-            loader.load();
-
+            loader.setLocation(getClass().getResource("../ChartMenuView.fxml"));
+            root = loader.load();
+            ChartMenuController controller = loader.getController();
+            controller.initView(this.tbtnCompare.isSelected(), this.loadShedderType, this.loadSheddingService, this.loadSheddingFinalResult);
             Stage stage = new Stage();
-
-            ChartController controller = loader.getController();
-
-            controller.setStage(stage);
-            if(this.tbtnCompare.isSelected()){
-                controller.initComparatorView(this.comparatorErrors);
-            }else{
-                this.loadSheddingService.shedLoad(this.inputFile, this.loadShedderType, this.computationType);
-                if(this.computationType.equals(Computation.GLOBAL)){
-                    controller.initView(this.loadSheddingService.getGlobalErrors());
-                }else{
-                    controller.initTimestampView(this.loadSheddingService.getResultsPerPercent());
-                }
-            }
+            stage.setTitle("Chart Menu");
+            stage.setScene(new Scene(root, 763, 163));
+            stage.show();
         }
         catch (IOException e) {
             e.printStackTrace();

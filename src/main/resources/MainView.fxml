@@ -28,12 +28,12 @@
       </Pane>
       <Pane layoutX="50.0" layoutY="208.0" prefHeight="111.0" prefWidth="200.0">
          <children>
-            <RadioButton fx:id="rbtnRandomLS" disable="true" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRadioButtonRandom" text="Random Load Shedder">
+            <RadioButton fx:id="rbtnRandomLS" disable="true" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRadioButtonRandom" text="Random Load Shedder" textFill="#f5f8fa">
                <font>
                   <Font size="11.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="rbtnSemanticLS" disable="true" layoutX="21.0" layoutY="53.0" mnemonicParsing="false" onAction="#handleRadioButtonSemantic" text="Semantic Load Shedder">
+            <RadioButton fx:id="rbtnSemanticLS" disable="true" layoutX="21.0" layoutY="53.0" mnemonicParsing="false" onAction="#handleRadioButtonSemantic" text="Semantic Load Shedder" textFill="#f5f8fa">
                <font>
                   <Font size="11.0" />
                </font>
