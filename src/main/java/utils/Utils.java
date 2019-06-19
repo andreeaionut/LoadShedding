@@ -2,10 +2,7 @@ package utils;
 
 import core.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Utils {
 
@@ -36,6 +33,7 @@ public class Utils {
             GlobalResult globalResult = new GlobalResult(entry.getValue().getMean(), entry.getValue().getStandardDeviation());
             globalResult.setLsCalculationTime(entry.getValue().getLsCalculationTime());
             globalResult.setStandardCalculationTime(entry.getValue().getStandardCalculationTime());
+            globalResult.setLoadSheddingPercent(entry.getValue().getLoadSheddingPercent());
             copy.put(entry.getKey(), globalResult);
         }
         return copy;
@@ -52,4 +50,25 @@ public class Utils {
         }
         return copy;
     }
+
+    public static Map<Integer, GlobalResult> sortByComparator(Map<Integer, GlobalResult> unsortedMap, String valueType, final boolean order) {
+        List<Map.Entry<Integer, GlobalResult>> list = new LinkedList<Map.Entry<Integer, GlobalResult>>(unsortedMap.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Integer, GlobalResult>>() {
+            public int compare(Map.Entry<Integer, GlobalResult> o1,
+                               Map.Entry<Integer, GlobalResult> o2) {
+                if (order) {
+                    return Double.compare(o1.getValue().getValue(valueType), o2.getValue().getValue(valueType));
+                }
+                else {
+                    return Double.compare(o2.getValue().getValue(valueType), o1.getValue().getValue(valueType));
+                }
+            }
+        });
+        Map<Integer, GlobalResult> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<Integer, GlobalResult> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
+    }
+
 }

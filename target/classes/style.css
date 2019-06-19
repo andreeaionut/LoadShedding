@@ -8,8 +8,7 @@
 }
 
 .label {
-    -fx-font-weight: bold;
-    -fx-text-fill: #2A5058;
+    -fx-text-fill: whitesmoke;
     -fx-effect: dropshadow( gaussian , rgba(214, 66, 20, 0.5), 0,0,0,1 );
 }
 
@@ -60,53 +59,30 @@
     -fx-background-color: 	#3CB371;
     -fx-text-fill: white;
     -fx-font-family: "Bookman Old Style";
+    -fx-font-size: 13px;
 }
 
-#tbtnChoose{
+#btnChart{
+    -fx-font-size: 13px;
+}
+
+#tbtnChoose, #tbtnCompare{
     -fx-text-fill: whitesmoke;
     -fx-font-family: "Bookman Old Style";
     -fx-background-color: #66CDAA;
+    -fx-opacity: 0.5;
 }
 
-#tbtnCompare{
+#tbtnGlobalComputation, #tbtnTimestampComputation{
     -fx-text-fill: whitesmoke;
-    -fx-background-color: 	#FFA07A;
+    -fx-background-color: #008B8B;
     -fx-font-family: "Bookman Old Style";
+    -fx-opacity: 0.5;
 }
 
-#tbtnGlobalComputation{
-    -fx-text-fill: whitesmoke;
-    -fx-background-color: 	#ADD8E6;
-    -fx-font-family: "Bookman Old Style";
-}
-
-#tbtnTimestampComputation{
-    -fx-text-fill: whitesmoke;
-    -fx-background-color: 	#FFB6C1;
-    -fx-font-family: "Bookman Old Style";
-}
-
-#apButtons{
+#primaryAnchor, #anchorPaneChartMenu{
     -fx-background-color:  #2A5058;
 
-}
-
-#splitLogIn{
-    -fx-box-border: transparent;
-    -fx-background-color: #2A5058;
-}
-
-#primaryAnchor{
-    -fx-background-color:  #2A5058;
-
-}
-
-#anchorPaneChartMenu{
-    -fx-background-color: #2A5058;
-}
-
-#lblMatricol, #lblMatricol1, #lblMatricol2, #lblMatricol3, #lblMatricol4{
-    -fx-text-fill: #9fdce3;
 }
 
 .text-field{
@@ -120,6 +96,12 @@
     -fx-font-family: "Georgia";
     -fx-text-fill: whitesmoke;
     -fx-font-size: 0.5cm;
+}
+
+#rbtnBestRatio, #rbtnMean, #rbtnStddev, #rbtnTime{
+    -fx-font-family: "Georgia";
+    -fx-text-fill: whitesmoke;
+    -fx-font-size: 0.4cm;
 }
 
 .AnchorPane{
@@ -139,13 +121,7 @@
     -fx-background-color: #cee1e3;
 }
 
-#gridUser {
-    -fx-border-color: darkcyan;
-    -fx-border-insets: 5;
-    -fx-border-width: 5;
-}
-
-#labelInvalidData, #labelInvalidNewData{
+#labelInvalidData, #lblErrorMessage{
     -fx-text-fill: #e38083;
     -fx-font-size: 20px;
     -fx-font-family: "Georgia";
@@ -163,4 +139,11 @@
 #txtUploadedFile{
     -fx-text-fill: white;
     -fx-background-color: darkcyan;
+}
+
+#btnSuggestedSettings{
+    -fx-background-color: #DC143C;
+    -fx-text-fill: white;
+    -fx-font-family: "Georgia";
+    -fx-font-size: 13px;
 }

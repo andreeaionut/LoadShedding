@@ -2,40 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d8bfc9c-3bf2-43c3-9ca7-71aeb253b648" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/ChartMenuController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/core/LoadSheddingFinalResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/CpuLoad.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/ChartMenuView.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/controllers/SuggestedSettingsController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/SuggestedSettingsView.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LoadShedding" beforeDir="false" afterPath="$PROJECT_DIR$/LoadShedding" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/ChartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/ChartController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/controllers/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/MainController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/core/GlobalResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/GlobalResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/core/SoldierStatusReport.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/core/SoldierStatusReport.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loadshedders/LoadShedder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loadshedders/LoadShedder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loadshedders/LoadShedderComparator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loadshedders/LoadShedderComparator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loadshedders/RandomLoadShedder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loadshedders/RandomLoadShedder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/loadshedders/SemanticLoadShedder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/loadshedders/SemanticLoadShedder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/managers/LoadSheddersFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/managers/LoadSheddersFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/managers/LoadSheddingManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/managers/LoadSheddingManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/managers/TimestampLSManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/managers/TimestampLSManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/managers/TimestampLoadSheddersFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/managers/TimestampLoadSheddersFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/managers/FileManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/managers/FileManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/services/LoadSheddingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/LoadSheddingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/timestamp/LoadShedderTS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/timestamp/LoadShedderTS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/timestamp/RandomLoadShedderTS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/timestamp/RandomLoadShedderTS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/timestamp/SemanticLoadShedderTS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/timestamp/SemanticLoadShedderTS.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/ChartMenuView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ChartMenuView.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/MainView.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/MainView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/controllers/ChartController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/controllers/ChartController$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/controllers/ChartController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/controllers/ChartController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/controllers/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/controllers/MainController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/core/GlobalResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/core/GlobalResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/core/SoldierStatusReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/core/SoldierStatusReport.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/loadshedders/LoadShedder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/loadshedders/LoadShedderComparator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/loadshedders/LoadShedderComparator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/managers/LoadSheddingManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/core/GlobalResult.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/loadshedders/RandomLoadShedder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/loadshedders/RandomLoadShedder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/loadshedders/SemanticLoadShedder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/loadshedders/SemanticLoadShedder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/managers/LoadSheddersFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/managers/LoadSheddersFactory.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/services/LoadSheddingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/LoadSheddingService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/style.css" afterDir="false" />
     </list>
@@ -49,7 +35,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/LoadShedding$Main.ic" NAME="Main Coverage Results" MODIFIED="1560692095195" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/LoadShedding$Main.ic" NAME="Main Coverage Results" MODIFIED="1560765564006" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -67,62 +53,61 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ChartMenuController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/controllers/ChartMenuController.java">
+      <file leaf-file-name="LoadSheddingService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/services/LoadSheddingService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="-14">
+              <caret line="91" column="20" lean-forward="true" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#7000#7001#0" expanded="true" />
+                <element signature="e#7044#7045#0" expanded="true" />
+                <element signature="e#7108#7109#0" expanded="true" />
+                <element signature="e#7144#7145#0" expanded="true" />
+                <element signature="e#7212#7213#0" expanded="true" />
+                <element signature="e#7252#7253#0" expanded="true" />
+                <element signature="e#7325#7326#0" expanded="true" />
+                <element signature="e#7377#7378#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ChartController.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/controllers/ChartController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="105" column="69" selection-start-line="105" selection-start-column="69" selection-end-line="105" selection-end-column="69" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/utils/Utils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="16" column="46" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoadSheddingFinalResult.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/core/LoadSheddingFinalResult.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="25" column="39" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainController.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/controllers/MainController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="174" column="31" selection-start-line="174" selection-start-column="23" selection-end-line="174" selection-end-column="31" />
+            <state relative-caret-position="-34">
+              <caret line="71" column="60" selection-start-line="71" selection-start-column="60" selection-end-line="71" selection-end-column="60" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-127">
+              <caret line="27" selection-start-line="27" selection-end-line="27" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FileManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/managers/FileManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="22" column="32" lean-forward="true" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
               <folding>
-                <element signature="e#1451#1452#0" expanded="true" />
-                <element signature="e#1519#1520#0" expanded="true" />
-                <element signature="e#8556#8557#0" expanded="true" />
-                <element signature="e#8590#8591#0" expanded="true" />
+                <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="style.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/style.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="36" column="4" lean-forward="true" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -141,7 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>rad</find>
       <find>stan</find>
       <find>setStag</find>
       <find>&lt;</find>
@@ -150,9 +134,19 @@
       <find>Go</find>
       <find>initTime</find>
       <find>Time</find>
-      <find>compa</find>
       <find>all</find>
       <find>shed</find>
+      <find>handleG</find>
+      <find>tbtnCom</find>
+      <find>rbtn</find>
+      <find>Global</find>
+      <find>global</find>
+      <find>compa</find>
+      <find>choose</find>
+      <find>glob</find>
+      <find>rad</find>
+      <find>sugge</find>
+      <find>btnCh</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -166,9 +160,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/core/RandomLoadShedder.java" />
-        <option value="$PROJECT_DIR$/src/main/java/core/loadshedders/RandomLoadShedder.java" />
-        <option value="$PROJECT_DIR$/src/main/java/LSFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/managers/LSFactory.java" />
         <option value="$PROJECT_DIR$/src/main/resources/data.csv" />
         <option value="$PROJECT_DIR$/src/main/java/core/ValueMeasured.java" />
@@ -191,11 +182,9 @@
         <option value="$PROJECT_DIR$/src/main/java/core/Computation.java" />
         <option value="$PROJECT_DIR$/src/main/java/loadshedders/ILoadShedder.java" />
         <option value="$PROJECT_DIR$/src/main/java/managers/AbstractLoadSheddersFactory.java" />
-        <option value="$PROJECT_DIR$/src/main/java/managers/FileManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/managers/TimestampLoadSheddersFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/timestamp/RandomLoadShedderTS.java" />
         <option value="$PROJECT_DIR$/src/main/java/timestamp/SemanticLoadShedderTS.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/style.css" />
         <option value="$PROJECT_DIR$/src/main/java/core/Result.java" />
         <option value="$PROJECT_DIR$/src/main/resources/ChartMenuView.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/utils/CpuLoad.java" />
@@ -206,17 +195,22 @@
         <option value="$PROJECT_DIR$/src/main/java/core/SoldierStatusReport.java" />
         <option value="$PROJECT_DIR$/src/main/java/loadshedders/LoadShedder.java" />
         <option value="$PROJECT_DIR$/src/main/java/managers/LoadSheddingManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/managers/LoadSheddersFactory.java" />
         <option value="$PROJECT_DIR$/src/main/java/timestamp/LoadShedderTS.java" />
         <option value="$PROJECT_DIR$/src/main/java/loadshedders/LoadShedderComparator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/core/GlobalResult.java" />
-        <option value="$PROJECT_DIR$/src/main/java/controllers/MainController.java" />
         <option value="$PROJECT_DIR$/src/main/java/controllers/ChartMenuController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/services/LoadSheddingService.java" />
-        <option value="$PROJECT_DIR$/src/main/java/utils/Utils.java" />
         <option value="$PROJECT_DIR$/src/main/java/core/LoadSheddingFinalResult.java" />
         <option value="$PROJECT_DIR$/src/main/java/controllers/ChartController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/core/SuggestedSettings.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/SuggestedSettingsView.fxml" />
+        <option value="$PROJECT_DIR$/src/main/java/utils/Utils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/core/GlobalResult.java" />
+        <option value="$PROJECT_DIR$/src/main/java/controllers/SuggestedSettingsController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/services/LoadSheddingService.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/style.css" />
+        <option value="$PROJECT_DIR$/src/main/java/managers/FileManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/controllers/MainController.java" />
       </list>
     </option>
   </component>
@@ -490,7 +484,7 @@
       <workItem from="1559052024811" duration="2001000" />
       <workItem from="1559138392525" duration="1194000" />
       <workItem from="1560248024742" duration="13349000" />
-      <workItem from="1560342818779" duration="42603000" />
+      <workItem from="1560342818779" duration="60831000" />
     </task>
     <task id="LOCAL-00001" summary="added timestamp load shedders">
       <created>1558686576315</created>
@@ -513,11 +507,18 @@
       <option name="project" value="LOCAL" />
       <updated>1558686622857</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added timestamp load shedders">
+      <created>1560765000296</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1560765000296</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="141288000" />
+    <option name="totallyTimeSpent" value="159516000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -525,27 +526,27 @@
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.49328858" weight="0.32062146" />
+      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4919463" weight="0.32062146" />
       <window_info anchor="right" id="Palette&#9;" order="9" />
       <window_info id="Image Layers" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.37785235" side_tool="true" visible="true" weight="0.38276836" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.38322148" side_tool="true" weight="0.33898306" />
       <window_info anchor="right" id="Maven Projects" order="6" weight="0.18724832" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.6221477" visible="true" weight="0.38276836" />
+      <window_info anchor="bottom" id="Version Control" order="10" sideWeight="0.49932885" weight="0.32909605" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.61677855" visible="true" weight="0.33898306" />
       <window_info anchor="right" id="Coverage" order="8" side_tool="true" weight="0.3295302" />
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49932885" weight="0.32909605" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="2" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2295302" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2295302" />
       <window_info anchor="right" id="Database" order="7" weight="0.3295302" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info id="Favorites" order="5" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6899329" weight="0.42655367" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.68590605" weight="0.42655367" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -572,54 +573,16 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/timestamp/LoadShedderTS.java</url>
-          <line>105</line>
-          <properties />
-          <option name="timeStamp" value="54" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/core/GlobalResult.java</url>
-          <line>39</line>
-          <properties />
-          <option name="timeStamp" value="80" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/controllers/ChartController.java</url>
           <line>136</line>
           <properties />
           <option name="timeStamp" value="86" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="89" />
+      <option name="time" value="91" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/chart/CategoryAxis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="377" selection-start-line="377" selection-end-line="377" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/TestController.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/core/RecordableSoldier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="28" lean-forward="true" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/core/SoldierByTimestamp.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/core/ComputationValue.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/core/SoldierStatusReportById.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/core/Computation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/loadshedders/ILoadShedder.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/managers/AbstractLoadSheddersFactory.java" />
     <entry file="file://$PROJECT_DIR$/src/main/resources/ChartView.fxml">
       <provider selected="true" editor-type-id="text-editor">
@@ -628,13 +591,6 @@
         </state>
       </provider>
       <provider editor-type-id="JavaFX-Scene-Builder" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/managers/FileManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-34">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/core/BodyTemperatureMeasurement.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -657,21 +613,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/MainView.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2788">
-          <caret line="164" column="24" selection-start-line="164" selection-start-column="24" selection-end-line="164" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -750,13 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="51" column="51" selection-start-line="51" selection-start-column="51" selection-end-line="51" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/collections/ListChangeBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
@@ -818,16 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/timestamp/LoadShedderTS.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="36" column="44" selection-start-line="36" selection-start-column="44" selection-end-line="36" selection-end-column="44" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/loadshedders/LoadShedderComparator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -845,19 +769,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/core/GlobalResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="36" column="24" lean-forward="true" selection-start-line="36" selection-start-column="24" selection-end-line="36" selection-end-column="24" />
-          <folding>
-            <element signature="e#440#441#0" expanded="true" />
-            <element signature="e#467#468#0" expanded="true" />
-            <element signature="e#507#508#0" expanded="true" />
-            <element signature="e#539#540#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/managers/LoadSheddingManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="256">
@@ -869,44 +780,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="109">
           <caret line="26" selection-start-line="26" selection-end-line="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/services/LoadSheddingService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="99" column="61" selection-start-line="99" selection-start-column="61" selection-end-line="99" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3677#3678#0" expanded="true" />
-            <element signature="e#3721#3722#0" expanded="true" />
-            <element signature="e#3920#3921#0" expanded="true" />
-            <element signature="e#3956#3957#0" expanded="true" />
-            <element signature="e#4024#4025#0" expanded="true" />
-            <element signature="e#4064#4065#0" expanded="true" />
-            <element signature="e#4137#4138#0" expanded="true" />
-            <element signature="e#4189#4190#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/ChartMenuController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="1657" selection-start-line="1657" selection-end-line="1657" />
-          <folding>
-            <element signature="e#66921#66922#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -927,48 +800,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/Node.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="8413" selection-start-line="8413" selection-end-line="8413" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/control/Button.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
           <caret line="186" selection-start-line="186" selection-end-line="186" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/event/Event.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="197" selection-start-line="197" selection-end-line="197" />
-          <folding>
-            <element signature="e#3304#3305#0" expanded="true" />
-            <element signature="e#3336#3337#0" expanded="true" />
-            <element signature="e#4362#4363#0" expanded="true" />
-            <element signature="e#4393#4394#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/Scene.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="2494" selection-start-line="2494" selection-end-line="2494" />
-          <folding>
-            <element signature="e#66617#66618#0" expanded="true" />
-            <element signature="e#66663#66664#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/utils/Utils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="16" column="46" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -982,19 +817,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/MainController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="174" column="31" selection-start-line="174" selection-start-column="23" selection-end-line="174" selection-end-column="31" />
-          <folding>
-            <element signature="e#1451#1452#0" expanded="true" />
-            <element signature="e#1519#1520#0" expanded="true" />
-            <element signature="e#8556#8557#0" expanded="true" />
-            <element signature="e#8590#8591#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/controllers/ChartController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
@@ -1002,6 +824,216 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/ChartMenuController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/MainView.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="95" selection-start-line="12" selection-start-column="95" selection-end-line="12" selection-end-column="95" />
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/core/SuggestedSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/src.zip!/java/util/LinkedList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="116" column="11" selection-start-line="116" selection-start-column="11" selection-end-line="116" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/utils/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="66" column="33" selection-start-line="66" selection-start-column="21" selection-end-line="66" selection-end-column="33" />
+          <folding>
+            <element signature="e#2298#2332#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/core/GlobalResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+          <folding>
+            <element signature="e#440#441#0" expanded="true" />
+            <element signature="e#467#468#0" expanded="true" />
+            <element signature="e#507#508#0" expanded="true" />
+            <element signature="e#539#540#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/timestamp/LoadShedderTS.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-328">
+          <caret line="68" column="60" selection-start-line="68" selection-start-column="50" selection-end-line="68" selection-end-column="60" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/SuggestedSettingsView.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="218">
+          <caret line="27" column="105" lean-forward="true" selection-start-line="27" selection-start-column="105" selection-end-line="27" selection-end-column="105" />
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="1657" selection-start-line="1657" selection-end-line="1657" />
+          <folding>
+            <element signature="e#66921#66922#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="8413" selection-start-line="8413" selection-end-line="8413" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/control/ToggleButton.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="257" selection-start-line="257" selection-end-line="257" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/control/RadioButton.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="114" selection-start-line="114" selection-end-line="114" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/control/TextField.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="89" selection-start-line="89" selection-end-line="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/control/TextInputControl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="627" selection-start-line="627" selection-end-line="627" />
+          <folding>
+            <element signature="e#39903#39904#0" expanded="true" />
+            <element signature="e#39959#39960#0" expanded="true" />
+            <element signature="e#51313#51314#0" expanded="true" />
+            <element signature="e#51383#51384#0" expanded="true" />
+            <element signature="e#51421#51422#0" expanded="true" />
+            <element signature="e#51468#51469#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/event/Event.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="197" selection-start-line="197" selection-end-line="197" />
+          <folding>
+            <element signature="e#3304#3305#0" expanded="true" />
+            <element signature="e#3336#3337#0" expanded="true" />
+            <element signature="e#4362#4363#0" expanded="true" />
+            <element signature="e#4393#4394#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_121/javafx-src.zip!/javafx/scene/Scene.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="2501" selection-start-line="2501" selection-end-line="2501" />
+          <folding>
+            <element signature="e#66617#66618#0" expanded="true" />
+            <element signature="e#66663#66664#0" expanded="true" />
+            <element signature="e#92668#92669#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/SuggestedSettingsController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="122" column="28" selection-start-line="122" selection-start-column="13" selection-end-line="122" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="36" column="4" lean-forward="true" selection-start-line="36" selection-start-column="4" selection-end-line="36" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/services/LoadSheddingService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-14">
+          <caret line="91" column="20" lean-forward="true" selection-start-line="91" selection-start-column="20" selection-end-line="91" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7000#7001#0" expanded="true" />
+            <element signature="e#7044#7045#0" expanded="true" />
+            <element signature="e#7108#7109#0" expanded="true" />
+            <element signature="e#7144#7145#0" expanded="true" />
+            <element signature="e#7212#7213#0" expanded="true" />
+            <element signature="e#7252#7253#0" expanded="true" />
+            <element signature="e#7325#7326#0" expanded="true" />
+            <element signature="e#7377#7378#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/managers/FileManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="22" column="32" lean-forward="true" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-127">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/controllers/MainController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-34">
+          <caret line="71" column="60" selection-start-line="71" selection-start-column="60" selection-end-line="71" selection-end-column="60" />
         </state>
       </provider>
     </entry>

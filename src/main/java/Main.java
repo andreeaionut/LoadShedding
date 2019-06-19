@@ -26,20 +26,11 @@ public class Main extends Application {
         return stage;
     }
 
-//    public static void main(String[] args){
-//        LoadSheddersFactory loadSheddersFactory = new LoadSheddersFactory();
-//        LoadShedder loadShedder = loadSheddersFactory.getLoadShedder(LoadShedderType.RANDOM);
-//        loadShedder.shedLoad();
-//
-//        LoadShedder loadShedderSemantic = loadSheddersFactory.getLoadShedder(LoadShedderType.SEMANTIC);
-//        loadShedderSemantic.shedLoad();
-//    }
-
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
 
-        double width = 700;
-        double height = 400;
+        double width = 800;
+        double height = 480;
 
         primaryStage.setMinWidth(width);
         primaryStage.setMinHeight(height);

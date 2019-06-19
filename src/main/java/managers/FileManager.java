@@ -4,9 +4,27 @@ import core.Soldier;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class FileManager {
+
+    public static String[] getFileHeader(String filename){
+        File file = new File(filename);
+        BufferedReader br;
+        String text = null;
+        try {
+            br = new BufferedReader(new FileReader(file));
+            text = br.readLine();
+            System.out.println(text);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return text.split(",");
+
+    }
 
     public static List<Soldier> getDataFromFile(String filename){
         File file = new File(filename);

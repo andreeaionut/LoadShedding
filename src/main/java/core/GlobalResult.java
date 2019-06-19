@@ -39,7 +39,10 @@ public class GlobalResult {
         if(valueType.equals("timeConsumed")){
             return lsCalculationTime;
         }
-        return standardDeviation;
+        if(valueType.equals("stddev")){
+            return standardDeviation;
+        }
+        return 2*this.lsCalculationTime / (this.standardDeviation + this.mean);
     }
 
     public int getLoadSheddingPercent() {
