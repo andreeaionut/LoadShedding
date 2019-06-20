@@ -13,24 +13,24 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainAnchorPane" prefHeight="480.0" prefWidth="800.0" stylesheets="style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+<AnchorPane fx:id="mainAnchorPane" prefHeight="528.0" prefWidth="886.0" stylesheets="style.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
    <children>
       <Button fx:id="btnUploadFile" layoutX="505.0" layoutY="37.0" mnemonicParsing="false" onAction="#handleUploadFile" prefHeight="32.0" prefWidth="150.0" text="Upload file" />
       <TextField fx:id="txtUploadedFile" disable="true" editable="false" layoutX="36.0" layoutY="37.0" prefHeight="26.0" prefWidth="440.0" />
-      <ToggleButtonGroup layoutX="36.0" layoutY="229.0" prefHeight="42.0" prefWidth="440.0" selectionType="SINGLE">
+      <ToggleButtonGroup layoutX="36.0" layoutY="242.0" prefHeight="42.0" prefWidth="440.0" selectionType="SINGLE">
           <toggles>
               <ToggleButton fx:id="tbtnChoose" onAction="#handleChooseClick" prefHeight="39.0" prefWidth="236.0" text="Choose Load Shedder type" />
               <ToggleButton fx:id="tbtnCompare" onAction="#handleCompareClick" prefHeight="39.0" prefWidth="208.0" text="Compare Load Shedders" />
           </toggles>
       </ToggleButtonGroup>
-      <Pane layoutX="50.0" layoutY="384.0" prefHeight="71.0" prefWidth="610.0">
+      <Pane layoutX="50.0" layoutY="397.0" prefHeight="71.0" prefWidth="610.0">
          <children>
             <Button fx:id="btnGo" disable="true" layoutX="27.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleGo" prefHeight="42.0" prefWidth="146.0" text="GO" />
             <Button fx:id="btnChart" disable="true" layoutX="243.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleChart" prefHeight="42.0" prefWidth="146.0" text="Chart" />
             <Button fx:id="btnSuggestedSettings" disable="true" layoutX="451.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleSuggestedSettings" prefHeight="42.0" prefWidth="146.0" text="Suggested settings" />
          </children>
       </Pane>
-      <Pane layoutX="50.0" layoutY="272.0" prefHeight="111.0" prefWidth="200.0">
+      <Pane layoutX="50.0" layoutY="285.0" prefHeight="111.0" prefWidth="200.0">
          <children>
             <RadioButton fx:id="rbtnRandomLS" disable="true" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleRadioButtonRandom" text="Random Load Shedder" textFill="#f5f8fa">
                <font>
@@ -44,7 +44,7 @@
             </RadioButton>
          </children>
       </Pane>
-      <Pane layoutX="36.0" layoutY="152.0" prefHeight="71.0" prefWidth="468.0">
+      <Pane layoutX="36.0" layoutY="165.0" prefHeight="71.0" prefWidth="468.0">
          <children>
             <ToggleButtonGroup fx:id="tgComputation" layoutY="29.0" prefHeight="42.0" prefWidth="440.0" selectionType="SINGLE">
                <toggles>
@@ -61,7 +61,7 @@
             </ToggleButtonGroup>
          </children>
       </Pane>
-      <Label layoutX="36.0" layoutY="81.0" text="File header" />
-      <HBox fx:id="hboxFileHeader" layoutX="36.0" layoutY="109.0" prefHeight="78.0" prefWidth="850.0" />
+      <Label layoutX="36.0" layoutY="101.0" text="File header - Select field for computation" />
+      <HBox fx:id="hboxFileHeader" layoutX="36.0" layoutY="137.0" prefHeight="55.0" prefWidth="710.0" />
    </children>
 </AnchorPane>

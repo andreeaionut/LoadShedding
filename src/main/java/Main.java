@@ -29,7 +29,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
 
-        double width = 800;
+        double width = 700;
         double height = 480;
 
         primaryStage.setMinWidth(width);

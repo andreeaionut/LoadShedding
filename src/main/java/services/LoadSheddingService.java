@@ -9,11 +9,13 @@ import timestamp.LoadShedderTS;
 import utils.Utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LoadSheddingService {
 
     private HashMap<Integer, GlobalResult> globalResults = new HashMap<>();
+    private HashMap<Integer, List<GlobalResult>> loadSheddedResultsPerTimestamp = new HashMap<>();
     private HashMap<Integer, GlobalResult> resultsPerPercent = new HashMap<>();
     private HashMap<LoadShedderType, LoadSheddingFinalResult> comparatorErrors;
 
@@ -25,6 +27,8 @@ public class LoadSheddingService {
 
     private LoadSheddingFinalResult loadSheddingGlobalFinalResult;
 
+    private int previousComputationFieldNumber = -1;
+
     public static boolean ASC = true;
     public static boolean DESC = false;
 
@@ -35,59 +39,64 @@ public class LoadSheddingService {
         this.comparatorErrors = new HashMap<>();
     }
 
-    public LoadSheddingFinalResult shedLoad(String inputFile, LoadShedderType loadShedderType, Computation computation){
+    public LoadSheddingFinalResult shedLoad(String inputFile, LoadShedderType loadShedderType, Computation computation, int computationFieldNumber){
         if(computation.equals(Computation.GLOBAL)){
+            LoadShedder loadShedder = null;
             switch(loadShedderType){
                 case RANDOM:
                 {
-                    if(this.loadSheddingGlobalRandomFinalResult == null){
-                        LoadShedder loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
+                    if(this.loadSheddingGlobalRandomFinalResult == null || this.previousComputationFieldNumber != computationFieldNumber){
+                        loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
                         globalResults = loadShedder.shedLoad();
                         this.loadSheddingGlobalRandomFinalResult = new LoadSheddingFinalResult();
                         this.loadSheddingGlobalRandomFinalResult.setLoadSheddedResults(globalResults);
                     }
+                    this.previousComputationFieldNumber = computationFieldNumber;
                     return this.loadSheddingGlobalRandomFinalResult;
                 }
                 case SEMANTIC:
                 {
-                    if(this.loadSheddingGlobalSemanticFinalResult == null){
-                        LoadShedder loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
+                    if(this.loadSheddingGlobalSemanticFinalResult == null || this.previousComputationFieldNumber != computationFieldNumber){
+                        loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
                         globalResults = loadShedder.shedLoad();
                         this.loadSheddingGlobalSemanticFinalResult = new LoadSheddingFinalResult();
                         this.loadSheddingGlobalSemanticFinalResult.setLoadSheddedResults(globalResults);
                     }
+                    this.previousComputationFieldNumber = computationFieldNumber;
                     return this.loadSheddingGlobalSemanticFinalResult;
                 }
             }
-            //this.loadSheddingGlobalFinalResult.setStandardResults(loadShedder.getStandardResult());
         }else{
             switch(loadShedderType){
                 case RANDOM:
                 {
-                    if(this.loadSheddingTimestampRandomFinalResult == null){
-                        LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
-                        loadShedderTS.shedLoad();
+                    if(this.loadSheddingTimestampRandomFinalResult == null || this.previousComputationFieldNumber != computationFieldNumber){
+                        LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
+                        this.loadSheddedResultsPerTimestamp = loadShedderTS.shedLoad();
                         this.resultsPerPercent = loadShedderTS.getResultsPerPercent();
                         this.loadSheddingTimestampRandomFinalResult = new LoadSheddingFinalResult();
                         this.loadSheddingTimestampRandomFinalResult.setLoadShedderType(loadShedderType);
                         this.loadSheddingTimestampRandomFinalResult.setLoadSheddedResults(Utils.copyGlobalResultsReportHashmap(resultsPerPercent));
+                        this.loadSheddingTimestampRandomFinalResult.setStandardResults(loadShedderTS.getStandardResults());
                     }
+                    this.previousComputationFieldNumber = computationFieldNumber;
                     return this.loadSheddingTimestampRandomFinalResult;
                 }
                 case SEMANTIC:
                 {
-                    if(this.loadSheddingTimestampSemanticFinalResult == null){
-                        LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile);
-                        loadShedderTS.shedLoad();
+                    if(this.loadSheddingTimestampSemanticFinalResult == null || this.previousComputationFieldNumber != computationFieldNumber){
+                        LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
+                        this.loadSheddedResultsPerTimestamp = loadShedderTS.shedLoad();
                         this.resultsPerPercent = loadShedderTS.getResultsPerPercent();
                         this.loadSheddingTimestampSemanticFinalResult = new LoadSheddingFinalResult();
                         this.loadSheddingTimestampSemanticFinalResult.setLoadShedderType(loadShedderType);
                         this.loadSheddingTimestampSemanticFinalResult.setLoadSheddedResults(Utils.copyGlobalResultsReportHashmap(resultsPerPercent));
+                        this.loadSheddingTimestampSemanticFinalResult.setStandardResults(loadShedderTS.getStandardResults());
                     }
+                    this.previousComputationFieldNumber = computationFieldNumber;
                     return this.loadSheddingTimestampSemanticFinalResult;
                 }
             }
-            //this.loadSheddingTimestampFinalResult.setStandardResults(loadShedderTS.getStandardResults());
         }
         return null;
     }
@@ -113,9 +122,9 @@ public class LoadSheddingService {
     }
 
 
-    public void compareLoadShedders(Computation computationType, String inputFile){
+    public void compareLoadShedders(Computation computationType, String inputFile, int computationFieldNumber){
         if(this.comparatorErrors.size() == 0)
-            this.comparatorErrors = this.loadShedderComparator.compareLoadShedders(computationType, inputFile);
+            this.comparatorErrors = this.loadShedderComparator.compareLoadShedders(computationType, inputFile, computationFieldNumber);
     }
 
     private LoadSheddingFinalResult getLoadSheddingFinalResultByComputationAndType(Computation computationType, LoadShedderType loadShedderType){
@@ -146,5 +155,13 @@ public class LoadSheddingService {
 
     public LoadSheddingFinalResult getLoadSheddingGlobalFinalResult() {
         return loadSheddingGlobalFinalResult;
+    }
+
+    public List<GlobalResult> getLoadSheddedResultsPerGivenTimestamp(int timestamp) {
+        return this.loadSheddedResultsPerTimestamp.get(timestamp);
+    }
+
+    public HashMap<Integer, List<GlobalResult>> getLoadSheddedResultsPerTimestamp() {
+        return loadSheddedResultsPerTimestamp;
     }
 }

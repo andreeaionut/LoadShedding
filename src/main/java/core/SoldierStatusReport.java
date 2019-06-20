@@ -33,6 +33,7 @@ public class SoldierStatusReport implements RecordableSoldier {
         soldierStatusReportCopy.setMean(soldierStatusReport.getMean());
         soldierStatusReportCopy.setMeasurements(new ArrayList<>(soldierStatusReport.getMeasurements()));
         soldierStatusReportCopy.setTimestamp(soldierStatusReport.getTimestamp());
+        soldierStatusReportCopy.setStandardCalculationTime(soldierStatusReport.getStandardCalculationTime());
         return soldierStatusReportCopy;
     }
 

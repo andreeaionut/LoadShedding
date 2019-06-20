@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Computation;
 import core.GlobalResult;
 import core.LoadShedderType;
 import core.LoadSheddingFinalResult;
@@ -9,12 +10,12 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.WritableImage;
 import javafx.stage.Stage;
+import services.LoadSheddingService;
 import utils.Utils;
 
 import javax.imageio.ImageIO;
@@ -27,9 +28,21 @@ public class ChartController {
 
     private LineChart lineChart;
     private Button btnExport;
+    private TextField txtTimestamp;
+    private TextField txtVersus;
+
+    private LoadSheddingService loadSheddingService;
+    private LoadSheddingFinalResult loadSheddingFinalResult;
+    private String chartType;
 
     public ChartController(){
         btnExport = new Button("Export to file");
+        txtTimestamp  = new TextField();
+        txtTimestamp.setPromptText("Timestamp");
+
+        txtVersus = new TextField();
+        txtVersus.setPromptText("Timestamp");
+
 
         btnExport.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
@@ -43,9 +56,76 @@ public class ChartController {
                 }
             }
         });
+
+        this.txtTimestamp.textProperty().addListener((observable, oldValue, newValue) -> {
+            ChartController.this.initTimestampChart(newValue, ChartController.this.chartType);
+        });
+
+        this.txtVersus.textProperty().addListener((observable, oldValue, newValue) -> {
+            ChartController.this.initStandardVersusLsView(chartType, loadSheddingFinalResult, loadSheddingService, newValue);
+        });
     }
 
-    public void initAllChartsView(LoadShedderType loadShedderType, LoadSheddingFinalResult loadSheddedResult){
+    public void setLoadSheddingFinalResult(LoadSheddingFinalResult loadSheddingFinalResult){
+        this.loadSheddingFinalResult = loadSheddingFinalResult;
+    }
+
+    private void initTimestampChart(String timestampValue, String chartType) {
+        int timestamp = 0;
+        try{
+            timestamp = Integer.valueOf(timestampValue);
+        }catch (NumberFormatException e){
+
+        }
+        List<GlobalResult> resultsPerTimestamp = this.loadSheddingService.getLoadSheddedResultsPerGivenTimestamp(timestamp);
+        if(resultsPerTimestamp == null){
+            return;
+        }
+        NumberAxis xAxis = new NumberAxis(0, 100, 10);
+        xAxis.setLabel("Load Shedding Percent");
+        NumberAxis yAxis = new NumberAxis   ();
+        yAxis.setLabel("Mean error");
+        lineChart = new LineChart(xAxis, yAxis);
+        XYChart.Series series = new XYChart.Series();
+
+        series.setName("Load shedder error evolution");
+        if(this.chartType.equals("all")){
+            XYChart.Series meanSeries = new XYChart.Series();
+            XYChart.Series stddevSeries = new XYChart.Series();
+
+            meanSeries.setName("Mean error");
+            stddevSeries.setName("Standard deviation error");
+
+            for(GlobalResult globalResult : resultsPerTimestamp){
+                meanSeries.getData().add(new XYChart.Data(globalResult.getLoadSheddingPercent(), globalResult.getMeanError()));
+                stddevSeries.getData().add(new XYChart.Data(globalResult.getLoadSheddingPercent(), globalResult.getStddevError()));
+            }
+            lineChart.getData().add(meanSeries);
+            lineChart.getData().add(stddevSeries);
+        }else{
+            for(GlobalResult globalResult : resultsPerTimestamp){
+                series.getData().add(new XYChart.Data(globalResult.getLoadSheddingPercent(), globalResult.getValue(chartType)));
+            }
+            lineChart.getData().add(series);
+        }
+
+
+        btnExport.setLayoutX(625);
+        btnExport.setLayoutY(450);
+        Group root = this.getRoot(Computation.TIMESTAMP);
+        Scene scene = new Scene(root, 800, 500);
+        String css = ChartController.class.getResource("../style.css").toExternalForm();
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(css);
+
+        stage.setTitle("Load Shedder");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void initAllChartsView(Computation computationType, LoadShedderType loadShedderType, LoadSheddingFinalResult loadSheddedResult){
+        this.chartType = "all";
+
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Load Shedding Percent");
@@ -65,8 +145,8 @@ public class ChartController {
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             GlobalResult globalResult = (GlobalResult) pair.getValue();
-            meanSeries.getData().add(new XYChart.Data(pair.getKey(), globalResult.getMean()));
-            stddevSeries.getData().add(new XYChart.Data(pair.getKey(), globalResult.getStandardDeviation()));
+            meanSeries.getData().add(new XYChart.Data(pair.getKey(), globalResult.getMeanError()));
+            stddevSeries.getData().add(new XYChart.Data(pair.getKey(), globalResult.getStddevError()));
             it.remove();
         }
 
@@ -76,11 +156,11 @@ public class ChartController {
         for(XYChart.Series seriesToAdd : series){
             lineChart.getData().add(seriesToAdd);
         }
-        btnExport.setLayoutX(550);
-        btnExport.setLayoutY(350);
-        Group root = new Group(lineChart, btnExport);
 
-        Scene scene = new Scene(root, 700, 400);
+        btnExport.setLayoutX(625);
+        btnExport.setLayoutY(450);
+        Group root = this.getRoot(computationType);
+        Scene scene = new Scene(root, 800, 500);
         String css = ChartController.class.getResource("../style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
@@ -90,7 +170,18 @@ public class ChartController {
         stage.show();
     }
 
-    public void initComparatorView(String chartType, HashMap<LoadShedderType, LoadSheddingFinalResult> comparatorErrors){
+    private Group getRoot(Computation computationType){
+        if(computationType.equals(Computation.TIMESTAMP)){
+            txtTimestamp.setLayoutX(550);
+            txtTimestamp.setLayoutY(370);
+            return new Group(lineChart, btnExport, txtTimestamp);
+        }else{
+            return new Group(lineChart, btnExport);
+        }
+    }
+
+    public void initComparatorView(Computation computationType, String chartType, HashMap<LoadShedderType, LoadSheddingFinalResult> comparatorErrors){
+        this.chartType = chartType;
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Load Shedding Percent");
@@ -113,11 +204,10 @@ public class ChartController {
         for(XYChart.Series seriesToAdd : series){
             lineChart.getData().add(seriesToAdd);
         }
-        btnExport.setLayoutX(550);
-        btnExport.setLayoutY(350);
-        Group root = new Group(lineChart, btnExport);
-
-        Scene scene = new Scene(root, 700, 400);
+        btnExport.setLayoutX(625);
+        btnExport.setLayoutY(450);
+        Group root = this.getRoot(computationType);
+        Scene scene = new Scene(root, 800, 500);
         String css = ChartController.class.getResource("../style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
@@ -127,7 +217,8 @@ public class ChartController {
         stage.show();
     }
 
-    void initView(String chartType, LoadShedderType loadShedderType, LoadSheddingFinalResult loadSheddingFinalResult){
+    void initView(String chartType, Computation computationType, LoadShedderType loadShedderType, LoadSheddingFinalResult loadSheddingFinalResult){
+        this.chartType = chartType;
         NumberAxis xAxis = new NumberAxis(0, 100, 10);
         xAxis.setLabel("Load Shedding Percent");
         NumberAxis yAxis = new NumberAxis   ();
@@ -146,11 +237,10 @@ public class ChartController {
         series.getData().add(new XYChart.Data(80, lsResults.get(80).getValue(chartType)));
         series.getData().add(new XYChart.Data(90, lsResults.get(90).getValue(chartType)));
         lineChart.getData().add(series);
-        btnExport.setLayoutX(550);
-        btnExport.setLayoutY(350);
-        Group root = new Group(lineChart, btnExport);
-
-        Scene scene = new Scene(root, 700, 400);
+        btnExport.setLayoutX(625);
+        btnExport.setLayoutY(450);
+        Group root = this.getRoot(computationType);
+        Scene scene = new Scene(root, 800, 500);
         String css = ChartController.class.getResource("../style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
@@ -160,39 +250,8 @@ public class ChartController {
         stage.show();
     }
 
-    void initTimestampView(String chartType, LoadShedderType loadShedderType, LoadSheddingFinalResult loadSheddedResult){
-        NumberAxis xAxis = new NumberAxis(0, 100, 10);
-        xAxis.setLabel("Load Shedding Percent");
-
-        NumberAxis yAxis = new NumberAxis   (0.0, 1.0, 0.1);
-        yAxis.setLabel("Mean error");
-
-        lineChart = new LineChart(xAxis, yAxis);
-
-        XYChart.Series series = new XYChart.Series();
-        series.setName("Load shedding error evolution");
-        HashMap<Integer, GlobalResult> errors = loadSheddedResult.getLoadSheddedResults();
-        for (Map.Entry<Integer, GlobalResult> entry : errors.entrySet()) {
-            series.getData().add(new XYChart.Data(entry.getKey(), entry.getValue().getValue(chartType)));
-        }
-
-        lineChart.getData().add(series);
-
-        btnExport.setLayoutX(550);
-        btnExport.setLayoutY(350);
-        Group root = new Group(lineChart, btnExport);
-
-        Scene scene = new Scene(root, 700, 400);
-        String css = ChartController.class.getResource("../style.css").toExternalForm();
-        scene.getStylesheets().clear();
-        scene.getStylesheets().add(css);
-
-        stage.setTitle("Timestamp " + loadShedderType.toString() + " Load Shedder");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void initTimeConsumedView(LoadSheddingFinalResult loadSheddingFinalResult){
+    public void initTimeConsumedView(Computation computationType, LoadSheddingFinalResult loadSheddingFinalResult){
+        this.chartType = "timeConsumed";
         NumberAxis xAxis = new NumberAxis();
         NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Load Shedding Percent");
@@ -219,11 +278,10 @@ public class ChartController {
         for(XYChart.Series seriesToAdd : series){
             lineChart.getData().add(seriesToAdd);
         }
-        btnExport.setLayoutX(550);
-        btnExport.setLayoutY(350);
-        Group root = new Group(lineChart, btnExport);
-
-        Scene scene = new Scene(root, 700, 400);
+        btnExport.setLayoutX(625);
+        btnExport.setLayoutY(450);
+        Group root = this.getRoot(computationType);
+        Scene scene = new Scene(root, 800, 500);
         String css = ChartController.class.getResource("../style.css").toExternalForm();
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
@@ -237,4 +295,69 @@ public class ChartController {
         this.stage = stage;
     }
 
+    public void setLoadSheddingService(LoadSheddingService loadSheddingService) {
+        this.loadSheddingService = loadSheddingService;
+    }
+
+    public void initStandardVersusLsView(String chartType, LoadSheddingFinalResult loadSheddingFinalResult, LoadSheddingService loadSheddingService, String timestamp) {
+        int intValueOfTimestamp = 0;
+        try{
+            intValueOfTimestamp = Integer.valueOf(timestamp);
+        }catch (NumberFormatException e){
+
+        }
+        this.loadSheddingFinalResult = loadSheddingFinalResult;
+        List<GlobalResult> lsResultsPerTimestamp = loadSheddingService.getLoadSheddedResultsPerGivenTimestamp(intValueOfTimestamp);
+        GlobalResult standardResult = loadSheddingFinalResult.getStandardResults().get(intValueOfTimestamp);
+
+        if(lsResultsPerTimestamp == null || standardResult == null){
+            return;
+        }
+
+        this.chartType = chartType;
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis;
+        if(this.chartType.equals("mean")){
+            yAxis = new NumberAxis(30.0, 38.0, 0.01);
+        }else{
+            if(this.chartType.equals("stddev")){
+                yAxis = new NumberAxis(0.0, 10.0, 0.01);
+            }else{
+                yAxis = new NumberAxis();
+            }
+        }
+
+        final BarChart<String,Number> bc =
+                new BarChart<String,Number>(xAxis,yAxis);
+        bc.setTitle("Standard versus Load shedded results");
+        xAxis.setLabel("Load shedding percent");
+        yAxis.setLabel("Relative error");
+
+        XYChart.Series stdSeries = new XYChart.Series();
+        stdSeries.setName("Standard "  + chartType + " value");
+        XYChart.Series lsSeries = new XYChart.Series();
+        lsSeries.setName("Load shedded " + chartType + " value");
+
+        for(int percent = 10; percent <= 90; percent += 10){
+            if(chartType.equals("timeConsumed")){
+                stdSeries.getData().add(new XYChart.Data(String.valueOf(percent), standardResult.getValue("stdTimeConsumed")));
+            }else{
+                stdSeries.getData().add(new XYChart.Data(String.valueOf(percent), standardResult.getValue(chartType)));
+            }
+            lsSeries.getData().add(new XYChart.Data(String.valueOf(percent), lsResultsPerTimestamp.get((percent-10)/10).getValue(chartType)));
+        }
+
+//        btnExport.setLayoutX(625);
+//        btnExport.setLayoutY(450);
+
+//        txtVersus.setLayoutX(625);
+//        txtVersus.setLayoutY(450);
+
+        Scene scene  = new Scene(bc,800,600);
+        bc.getData().addAll(stdSeries, lsSeries);
+        stage.setTitle("Standard versus Load shedded results");
+        stage.setScene(scene);
+        stage.show();
+
+    }
 }

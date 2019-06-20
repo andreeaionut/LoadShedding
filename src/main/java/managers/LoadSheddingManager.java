@@ -14,9 +14,9 @@ public class LoadSheddingManager {
 
     private String inputFile;
 
-    public LoadSheddingManager(String inputFile) {
+    public LoadSheddingManager(String inputFile, int computationFieldNumber) {
         this.inputFile = inputFile;
-        this.data = FileManager.getDataFromFile(inputFile);
+        this.data = FileManager.getDataFromFile(inputFile, computationFieldNumber);
         createStandardResults();
         this.globalResult = this.getStandardGlobalResult();
     }

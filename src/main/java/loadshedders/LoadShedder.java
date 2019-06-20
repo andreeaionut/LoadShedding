@@ -24,8 +24,8 @@ public abstract class LoadShedder {
         this.standardResults = this.loadSheddingManager.getStandardResults();
     }
 
-    LoadShedder(String inputFile){
-        this.loadSheddingManager = new LoadSheddingManager(inputFile);
+    LoadShedder(String inputFile, int computationFieldNumber){
+        this.loadSheddingManager = new LoadSheddingManager(inputFile, computationFieldNumber);
         this.standardResults = this.loadSheddingManager.getStandardResults();
         this.globalResult = this.loadSheddingManager.getGlobalResult();
     }
@@ -62,15 +62,15 @@ public abstract class LoadShedder {
             GlobalResult loadSheddedGlobalResult = this.loadSheddingManager.calculateGlobalResultFromHashMap(loadSheddedResults);
             //double mean = this.loadSheddingManager.getGlobalMean(loadSheddedResults);
             //double stddev = this.loadSheddingManager.getGlobalStandardDeviation(mean, loadSheddedResults);
-            double meanError = Math.abs(loadSheddedGlobalResult.getMean() - this.globalResult.getMean());
-            double stdDevError = Math.abs(loadSheddedGlobalResult.getStandardDeviation() - this.globalResult.getStandardDeviation());
+            double meanError = Math.abs(loadSheddedGlobalResult.getMean() - this.globalResult.getMean())/this.globalResult.getMean();
+            double stdDevError = Math.abs(loadSheddedGlobalResult.getStandardDeviation() - this.globalResult.getStandardDeviation())/ this.globalResult.getStandardDeviation();
 
             long end = System.currentTimeMillis();
             long ts = (end - begin);
 
             //GlobalResult loadSheddedGlobalResult = new GlobalResult();
-            loadSheddedGlobalResult.setMean(meanError);
-            loadSheddedGlobalResult.setStandardDeviation(stdDevError);
+            loadSheddedGlobalResult.setMeanError(meanError);
+            loadSheddedGlobalResult.setStddevError(stdDevError);
             loadSheddedGlobalResult.setLsCalculationTime(ts);
             loadSheddedGlobalResult.setLoadSheddingPercent(currentLoadSheddingPercent);
             errors.put(currentLoadSheddingPercent, loadSheddedGlobalResult);

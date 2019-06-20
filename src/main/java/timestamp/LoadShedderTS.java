@@ -21,8 +21,8 @@ public abstract class LoadShedderTS {
     private HashMap<Integer, List<Soldier>> data;
     protected LoadShedderType loadShedderType;
 
-    public LoadShedderTS(String inputFile){
-        this.loadSheddingManager = new TimestampLSManager(inputFile);
+    public LoadShedderTS(String inputFile, int computationFieldNumber){
+        this.loadSheddingManager = new TimestampLSManager(inputFile, computationFieldNumber);
         this.standardResults = this.loadSheddingManager.createStandardResults();
         this.data = this.loadSheddingManager.getData();
     }
@@ -30,7 +30,7 @@ public abstract class LoadShedderTS {
     public abstract void dropTuples(int dropPercent, List<Soldier> soldiers);
 
     public HashMap<Integer, GlobalResult> getStandardResults(){
-        return this.loadSheddingManager.getStandardResults();
+        return this.standardResults;
     }
 
     public HashMap<Integer, List<GlobalResult>> shedLoad(){
@@ -52,20 +52,22 @@ public abstract class LoadShedderTS {
                 long lastThreadTime = CpuLoad.getInstance().getThreadMXBean().getCurrentThreadCpuTime();
 
                 double mean = getMean(beforeLS);
-                double meanError = Math.abs(mean - this.standardResults.get(timestamp).getMean());
-                double standardDeviation = this.standardResults.get(timestamp).getStandardDeviation();
-                double standardDeviationError = Math.abs(this.loadSheddingManager.getStandardDeviation(beforeLS, mean) - standardDeviation);
+                double meanError = Math.abs(mean - this.standardResults.get(timestamp).getMean())/this.standardResults.get(timestamp).getMean();
+                double standardDeviation = this.loadSheddingManager.getStandardDeviation(beforeLS, mean);
+                double standardDeviationError = Math.abs(standardDeviation - this.standardResults.get(timestamp).getStandardDeviation())/this.standardResults.get(timestamp).getStandardDeviation();
 
-                //long end = System.currentTimeMillis();
-                //long dt = (end - begin);
+//                long end = System.currentTimeMillis();
+//                long dt = (end - begin);
                 long time = System.nanoTime();
                 long threadTime = CpuLoad.getInstance().getThreadMXBean().getCurrentThreadCpuTime();
                 double dt = (threadTime - lastThreadTime) / (double)(time - lastTime);
                 smoothLoad += (dt - smoothLoad) * 0.4;
 
                 GlobalResult globalResult = new GlobalResult();
-                globalResult.setMean(meanError);
-                globalResult.setStandardDeviation(standardDeviationError);
+                globalResult.setMean(mean);
+                globalResult.setMeanError(meanError);
+                globalResult.setStandardDeviation(standardDeviation);
+                globalResult.setStddevError(standardDeviationError);
                 globalResult.setLsCalculationTime(smoothLoad);
                 globalResult.setLoadSheddingPercent(currentLoadSheddingPercent);
                 errorsPerTimestamp.add(globalResult);
@@ -83,20 +85,28 @@ public abstract class LoadShedderTS {
         int currentPercent = LS_PERCENT_STEP_SIZE;
         while(currentPercent <= MAX_LS_PERCENT) {
             double meanSum = 0;
+            double meanErrorSum = 0;
             double stdDevSum = 0;
+            double stdDevErrorSum = 0;
             int values = 0;
             double timeConsumed = 0;
             for (Map.Entry<Integer, List<GlobalResult>> entry : this.loadSheddedResults.entrySet()) {
                 meanSum += entry.getValue().get(currentPercent/10 - 1).getMean();
+                meanErrorSum += entry.getValue().get(currentPercent/10 - 1).getMeanError();
                 stdDevSum += entry.getValue().get(currentPercent/10 - 1).getStandardDeviation();
+                stdDevErrorSum += entry.getValue().get(currentPercent/10 - 1).getStddevError();
                 timeConsumed += entry.getValue().get(currentPercent/10 - 1).getLsCalculationTime();
                 values++;
             }
             double mean = meanSum / values;
+            double meanError = meanErrorSum / values;
             double stdDev = stdDevSum / values;
+            double stdDevError = stdDevErrorSum / values;
             GlobalResult globalResult = new GlobalResult();
             globalResult.setMean(mean);
+            globalResult.setMeanError(meanError);
             globalResult.setStandardDeviation(stdDev);
+            globalResult.setStddevError(stdDevError);
             globalResult.setLsCalculationTime(timeConsumed);
             globalResult.setLoadSheddingPercent(currentPercent);
             result.put(currentPercent, globalResult);

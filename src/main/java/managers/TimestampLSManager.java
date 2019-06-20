@@ -11,15 +11,16 @@ public class TimestampLSManager {
 
     private List<Soldier> data;
     private HashMap<Integer, List<Soldier>> results = new HashMap<>();
-    private HashMap<Integer, GlobalResult> standardResults = new HashMap<>();
+    private HashMap<Integer, GlobalResult> standardResults;
 
-    public TimestampLSManager(String inputFile) {
-        this.data = FileManager.getDataFromFile(inputFile);
+    public TimestampLSManager(String inputFile, int computationFieldNumber) {
+        this.data = FileManager.getDataFromFile(inputFile, computationFieldNumber);
         this.createTimestampHashMap();
         this.standardResults = createStandardResults();
     }
 
     private void createTimestampHashMap(){
+        this.results.clear();
         for(Soldier soldier : this.data){
             int timestamp = soldier.getTimestamp();
             if(results.containsKey(timestamp)){
@@ -49,30 +50,34 @@ public class TimestampLSManager {
         HashMap<Integer, GlobalResult> results = new HashMap<>();
         HashMap<Integer, List<Soldier>> resultsCopy = Utils.copySoldiersHashmap(this.results);
         Iterator it = resultsCopy.entrySet().iterator();
+        float smoothLoad = 0;
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             List<Soldier> soldiersPerTimestamp = (List<Soldier>) pair.getValue();
+            int timestamp = (int) pair.getKey();
             double meanSum = 0;
             int numberOfValues = 0;
             //long begin = System.currentTimeMillis();
             long lastTime = System.nanoTime();
             long lastThreadTime = CpuLoad.getInstance().getThreadMXBean().getCurrentThreadCpuTime();
+
             for(Soldier soldier : soldiersPerTimestamp){
                 meanSum += soldier.getBodyTemperature();
                 numberOfValues++;
             }
             double mean = meanSum/numberOfValues;
             double standardDeviation = this.getStandardDeviation(soldiersPerTimestamp, mean);
-            //long end = System.currentTimeMillis();
-            //long dt = (end - begin);
+//            long end = System.currentTimeMillis();
+//            long dt = (end - begin);
             long time = System.nanoTime();
             long threadTime = CpuLoad.getInstance().getThreadMXBean().getCurrentThreadCpuTime();
             double dt = (threadTime - lastThreadTime) / (double)(time - lastTime);
+            smoothLoad += (dt - smoothLoad) * 0.4;
 
             GlobalResult globalResult = new GlobalResult();
             globalResult.setMean(mean);
             globalResult.setStandardDeviation(standardDeviation);
-            globalResult.setStandardCalculationTime(dt);
+            globalResult.setStandardCalculationTime(smoothLoad);
             results.put((Integer) pair.getKey(), globalResult);
             it.remove();
         }

@@ -1,10 +1,16 @@
 package controllers;
 
+import core.Computation;
 import core.GlobalResult;
 import core.LoadShedderType;
 import core.LoadSheddingFinalResult;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
 import services.LoadSheddingService;
 
 import java.io.IOException;
@@ -21,17 +27,37 @@ public class ChartMenuController {
 
     private boolean comparator;
     private String chartType;
+    private Computation computationType;
+
+    @FXML
+    private Button btnMeanError;
+    @FXML
+    private Button btnStddevError;
+    @FXML
+    private Button btnTimeConsumed;
+    @FXML
+    private Button btnAll;
+    @FXML
+    private CheckBox cBoxVersus;
 
     public ChartMenuController(){
     }
 
-    public void handleAbsoluteError(){
-        this.chartType = "mean";
+    public void handleMean(){
+        if(this.cBoxVersus.isSelected()){
+            this.chartType = "mean";
+        }else{
+            this.chartType = "meanError";
+        }
         this.showChart();
     }
 
     public void handleStandardDeviation(){
-        this.chartType = "stddev";
+        if(this.cBoxVersus.isSelected()){
+            this.chartType = "stddev";
+        }else{
+            this.chartType = "stddevError";
+        }
         this.showChart();
     }
 
@@ -45,11 +71,28 @@ public class ChartMenuController {
         this.showChart();
     }
 
-    public void initView(boolean comparator, LoadShedderType loadShedderType, LoadSheddingService loadSheddingService, LoadSheddingFinalResult loadSheddingFinalResult) {
+    public void initView(boolean comparator, Computation computationType, LoadShedderType loadShedderType, LoadSheddingService loadSheddingService, LoadSheddingFinalResult loadSheddingFinalResult) {
         this.comparator = comparator;
         this.loadShedderType = loadShedderType;
         this.loadSheddingService = loadSheddingService;
         this.loadSheddingFinalResult = loadSheddingFinalResult;
+        this.computationType = computationType;
+        cBoxVersus.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if(cBoxVersus.isSelected()){
+                    ChartMenuController.this.btnAll.setDisable(true);
+                    ChartMenuController.this.btnTimeConsumed.setDisable(true);
+                }else{
+                    ChartMenuController.this.btnAll.setDisable(false);
+                    ChartMenuController.this.btnTimeConsumed.setDisable(false);
+                }
+            }
+        });
+    }
+
+    public void handleCbox(){
+
     }
 
     private void showChart(){
@@ -62,23 +105,29 @@ public class ChartMenuController {
         }
         Stage stage = new Stage();
         ChartController controller = loader.getController();
+        controller.setLoadSheddingFinalResult(this.loadSheddingFinalResult);
+        controller.setLoadSheddingService(this.loadSheddingService);
         controller.setStage(stage);
+        if(this.cBoxVersus.isSelected()){
+            controller.initStandardVersusLsView(this.chartType, this.loadSheddingFinalResult, loadSheddingService, "61");
+            return;
+        }
         if(this.comparator){
-            controller.initComparatorView(this.chartType, this.loadSheddingService.getComparatorErrors());
+            controller.initComparatorView(computationType, this.chartType, this.loadSheddingService.getComparatorErrors());
         }else{
             if(this.chartType.equals("all")){
-                controller.initAllChartsView(loadShedderType, this.loadSheddingFinalResult);
+                controller.initAllChartsView(computationType, loadShedderType, this.loadSheddingFinalResult);
             }else{
-                if(this.chartType.equals("mean")){
-                    controller.initView(chartType, loadShedderType, this.loadSheddingFinalResult);
+                if(this.chartType.equals("meanError") || this.chartType.equals("stddevError")){
+                    controller.initView(chartType, computationType, loadShedderType, this.loadSheddingFinalResult);
                 }else{
                     if(this.chartType.equals("timeConsumed")){
-                        controller.initTimeConsumedView(loadSheddingFinalResult);
-                    }else{
-                        controller.initView(chartType, loadShedderType, loadSheddingFinalResult);
+                        controller.initTimeConsumedView(computationType, loadSheddingFinalResult);
                     }
                 }
             }
         }
     }
+
+
 }

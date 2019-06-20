@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Random;
 
 public class SemanticLoadShedderTS extends LoadShedderTS {
-    public SemanticLoadShedderTS(String inputFile) {
-        super(inputFile);
+    public SemanticLoadShedderTS(String inputFile, int computationFieldNumber) {
+        super(inputFile, computationFieldNumber);
         this.loadShedderType = LoadShedderType.SEMANTIC;
     }
 

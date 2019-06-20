@@ -9,8 +9,8 @@ import java.util.*;
 
 public class RandomLoadShedder extends LoadShedder {
 
-    public RandomLoadShedder(String inputFile) {
-        super(inputFile);
+    public RandomLoadShedder(String inputFile, int computationFieldNumber) {
+        super(inputFile, computationFieldNumber);
         this.loadShedderType = LoadShedderType.RANDOM;
     }
 

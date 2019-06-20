@@ -4,6 +4,9 @@ public class GlobalResult {
     private double mean;
     private double standardDeviation;
 
+    private double meanError;
+    private double stddevError;
+
     private double lsCalculationTime;
     private double standardCalculationTime;
     private int loadSheddingPercent;
@@ -33,16 +36,23 @@ public class GlobalResult {
     }
 
     public double getValue(String valueType){
-        if(valueType.equals("mean")){
-            return mean;
+        switch(valueType){
+            case "mean":
+                return mean;
+            case "stddev":
+                return standardDeviation;
+            case "meanError":
+                return meanError;
+            case "stddevError":
+                return stddevError;
+            case "timeConsumed":
+                return lsCalculationTime;
+            case "stdTimeConsumed":
+                return standardCalculationTime;
+            case "bestRatio":
+                return 2*this.lsCalculationTime / (this.stddevError + this.meanError);
         }
-        if(valueType.equals("timeConsumed")){
-            return lsCalculationTime;
-        }
-        if(valueType.equals("stddev")){
-            return standardDeviation;
-        }
-        return 2*this.lsCalculationTime / (this.standardDeviation + this.mean);
+        return 0;
     }
 
     public int getLoadSheddingPercent() {
@@ -68,4 +78,21 @@ public class GlobalResult {
     public void setStandardCalculationTime(double standardCalculationTime) {
         this.standardCalculationTime = standardCalculationTime;
     }
+
+    public double getMeanError() {
+        return meanError;
+    }
+
+    public void setMeanError(double meanError) {
+        this.meanError = meanError;
+    }
+
+    public double getStddevError() {
+        return stddevError;
+    }
+
+    public void setStddevError(double stddevError) {
+        this.stddevError = stddevError;
+    }
+
 }

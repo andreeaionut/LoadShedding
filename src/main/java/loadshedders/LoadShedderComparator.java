@@ -16,16 +16,16 @@ public class LoadShedderComparator {
         this.loadSheddingService = loadSheddingService;
     }
 
-    public HashMap<LoadShedderType, LoadSheddingFinalResult> compareLoadShedders(Computation computationType, String inputFile){
+    public HashMap<LoadShedderType, LoadSheddingFinalResult> compareLoadShedders(Computation computationType, String inputFile, int computationFieldNumber){
         this.errors.clear();
         for (LoadShedderType lsType : LoadShedderType.values()) {
             if(computationType.equals(Computation.GLOBAL)) {
                 if(this.loadSheddingService.getLoadSheddingGlobalFinalResult() == null){
-                    loadSheddingService.shedLoad(inputFile, lsType, computationType);
+                    loadSheddingService.shedLoad(inputFile, lsType, computationType, computationFieldNumber);
                 }
                 this.errors.put(lsType, this.loadSheddingService.getLoadSheddingGlobalFinalResult());
             }else{
-                this.errors.put(lsType, loadSheddingService.shedLoad(inputFile, lsType, computationType));
+                this.errors.put(lsType, loadSheddingService.shedLoad(inputFile, lsType, computationType, computationFieldNumber));
             }
         }
         return this.errors;

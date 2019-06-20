@@ -10,17 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import managers.FileManager;
 import services.LoadSheddingService;
-import sun.applet.Main;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 
 public class MainController {
 
@@ -77,20 +73,24 @@ public class MainController {
             ToggleGroup group = new ToggleGroup();
             int currentHeader = 0;
             for(String header : fileHeader){
-                RadioButton button1 = new RadioButton(header);
-                button1.setId(String.valueOf(currentHeader));
-                button1.setToggleGroup(group);
-                button1.setStyle("-fx-font-size: 0.35cm;");
-                int finalCurrentHeader = currentHeader;
-                button1.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent arg0) {
-                        if(button1.isSelected()){
-                            MainController.this.computationFieldNumber = finalCurrentHeader;
+                if(currentHeader > 1){
+                    RadioButton button1 = new RadioButton(header);
+                    button1.setId(String.valueOf(currentHeader));
+                    button1.setToggleGroup(group);
+                    button1.setStyle("-fx-font-size: 0.4cm;");
+                    int finalCurrentHeader = currentHeader;
+                    button1.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent arg0) {
+                            if(button1.isSelected()){
+                                MainController.this.computationFieldNumber = finalCurrentHeader;
+                                MainController.this.btnChart.setDisable(true);
+                                MainController.this.btnSuggestedSettings.setDisable(true);
+                            }
                         }
-                    }
-                });
-                this.hboxFileHeader.getChildren().add(button1);
+                    });
+                    this.hboxFileHeader.getChildren().add(button1);
+                }
                 currentHeader++;
             }
             if(this.tbtnChoose.selectedProperty().getValue() || this.tbtnCompare.selectedProperty().getValue()){
@@ -183,17 +183,17 @@ public class MainController {
             computationType = Computation.TIMESTAMP;
         }
         if(this.tbtnCompare.isSelected()){
-            this.loadSheddingService.compareLoadShedders(computationType, this.inputFile);
+            this.loadSheddingService.compareLoadShedders(computationType, this.inputFile, this.computationFieldNumber);
             this.btnChart.setDisable(false);
         }else{
             if(this.rbtnRandomLS.isSelected()){
                 loadShedderType = LoadShedderType.RANDOM;
-                this.loadSheddingFinalResult = this.loadSheddingService.shedLoad(inputFile, loadShedderType, computationType);
+                this.loadSheddingFinalResult = this.loadSheddingService.shedLoad(inputFile, loadShedderType, computationType, this.computationFieldNumber);
             }else{
                 if(this.rbtnSemanticLS.isSelected()){
                     loadShedderType = LoadShedderType.SEMANTIC;
                 }
-                this.loadSheddingFinalResult = this.loadSheddingService.shedLoad(inputFile, loadShedderType, computationType);
+                this.loadSheddingFinalResult = this.loadSheddingService.shedLoad(inputFile, loadShedderType, computationType, this.computationFieldNumber);
             }
             this.btnChart.setDisable(false);
             this.btnSuggestedSettings.setDisable(false);
@@ -207,10 +207,10 @@ public class MainController {
             loader.setLocation(getClass().getResource("../ChartMenuView.fxml"));
             root = loader.load();
             ChartMenuController controller = loader.getController();
-            controller.initView(this.tbtnCompare.isSelected(), this.loadShedderType, this.loadSheddingService, this.loadSheddingFinalResult);
+            controller.initView(this.tbtnCompare.isSelected(), this.computationType, this.loadShedderType, this.loadSheddingService, this.loadSheddingFinalResult);
             Stage stage = new Stage();
             stage.setTitle("Chart Menu");
-            stage.setScene(new Scene(root, 763, 163));
+            stage.setScene(new Scene(root, 350, 400));
             stage.show();
         }
         catch (IOException e) {

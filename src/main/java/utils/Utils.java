@@ -28,10 +28,13 @@ public class Utils {
 
     public static HashMap<Integer, GlobalResult> copyGlobalResultsReportHashmap(HashMap<Integer, GlobalResult> original){
         HashMap<Integer, GlobalResult> copy = new HashMap<>();
-        for (Map.Entry<Integer, GlobalResult> entry : original.entrySet())
-        {
-            GlobalResult globalResult = new GlobalResult(entry.getValue().getMean(), entry.getValue().getStandardDeviation());
+        for (Map.Entry<Integer, GlobalResult> entry : original.entrySet()) {
+            GlobalResult globalResult = new GlobalResult();
+            globalResult.setStandardDeviation(entry.getValue().getStandardDeviation());
+            globalResult.setMean(entry.getValue().getMean());
             globalResult.setLsCalculationTime(entry.getValue().getLsCalculationTime());
+            globalResult.setStddevError(entry.getValue().getStddevError());
+            globalResult.setMeanError(entry.getValue().getMeanError());
             globalResult.setStandardCalculationTime(entry.getValue().getStandardCalculationTime());
             globalResult.setLoadSheddingPercent(entry.getValue().getLoadSheddingPercent());
             copy.put(entry.getKey(), globalResult);

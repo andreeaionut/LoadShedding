@@ -18,12 +18,12 @@ public class TimestampLoadSheddersFactory {
         return instance;
     }
 
-    public LoadShedderTS getLoadShedder(LoadShedderType type, String inputFile){
+    public LoadShedderTS getLoadShedder(LoadShedderType type, String inputFile, int computationFieldNumber){
         if(type.equals(LoadShedderType.RANDOM)){
-            return new RandomLoadShedderTS(inputFile);
+            return new RandomLoadShedderTS(inputFile, computationFieldNumber);
         }
         if(type.equals(LoadShedderType.SEMANTIC)){
-            return new SemanticLoadShedderTS(inputFile);
+            return new SemanticLoadShedderTS(inputFile, computationFieldNumber);
         }
         return null;
     }

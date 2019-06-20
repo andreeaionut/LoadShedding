@@ -19,12 +19,12 @@ public class LoadSheddersFactory {
         return instance;
     }
 
-    public LoadShedder getLoadShedder(LoadShedderType type, String inputFile){
+    public LoadShedder getLoadShedder(LoadShedderType type, String inputFile, int computationFieldNumber){
         if(type.equals(LoadShedderType.RANDOM)){
-            return new RandomLoadShedder(inputFile);
+            return new RandomLoadShedder(inputFile, computationFieldNumber);
         }
         if(type.equals(LoadShedderType.SEMANTIC)){
-            return new SemanticLoadShedder(inputFile);
+            return new SemanticLoadShedder(inputFile, computationFieldNumber);
         }
         return null;
     }
