@@ -6,19 +6,16 @@ import utils.Utils;
 
 import java.util.*;
 
-public class LoadSheddingManager {
+public class GlobalLoadSheddingManager {
 
     private List<Soldier> data;
-    private HashMap<Integer, SoldierStatusReport> standardResults = new HashMap<Integer, SoldierStatusReport>();
-    private GlobalResult globalResult;
+    private HashMap<Integer, SoldierStatusReport> standardResults = new HashMap<>();
+    private Result result;
 
-    private String inputFile;
-
-    public LoadSheddingManager(String inputFile, int computationFieldNumber) {
-        this.inputFile = inputFile;
+    public GlobalLoadSheddingManager(String inputFile, int computationFieldNumber) {
         this.data = FileManager.getDataFromFile(inputFile, computationFieldNumber);
         createStandardResults();
-        this.globalResult = this.getStandardGlobalResult();
+        this.result = this.getStandardGlobalResult();
     }
 
     public HashMap<Integer, SoldierStatusReport> getStandardResults(){
@@ -36,10 +33,8 @@ public class LoadSheddingManager {
                 soldierStatusReport = new SoldierStatusReport();
                 soldierStatusReport.setId(soldier.getId());
                 soldierStatusReport.setNumberOfValues(1);
-                //soldierStatusReport.setSumOfBodyTemperature(soldier.getBodyTemperature());
             }else{
                 soldierStatusReport = standardResults.get(soldier.getId());
-                //soldierStatusReport.setSumOfBodyTemperature(soldierStatusReport.getSumOfBodyTemperature() + soldier.getBodyTemperature());
                 soldierStatusReport.setNumberOfValues(soldierStatusReport.getNumberOfValues() + 1);
             }
             BodyTemperatureMeasurement measurement = new BodyTemperatureMeasurement();
@@ -86,29 +81,6 @@ public class LoadSheddingManager {
         return standardDeviation;
     }
 
-    public List<Integer> getSoldiersIdsRange(HashMap<Integer, SoldierStatusReport> soldiers){
-        HashMap<Integer, SoldierStatusReport> standardResultsCopy = Utils.copySoldierStatusReportHashmap(soldiers);
-        Iterator it = standardResultsCopy.entrySet().iterator();
-        int lastId = 0;
-        int firstId = Integer.MAX_VALUE;
-
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            int id = (int) pair.getKey();
-            if(id>lastId){
-                lastId = id;
-            }
-            if(id < firstId){
-                firstId = id;
-            }
-            it.remove();
-        }
-        List<Integer> ids = new ArrayList<>();
-        ids.add(firstId);
-        ids.add(lastId);
-        return ids;
-    }
-
     public double getGlobalMean(HashMap<Integer, SoldierStatusReport> standardResults) {
         double globalSumOfMeans = 0;
         double values = 0;
@@ -139,22 +111,22 @@ public class LoadSheddingManager {
         return globalStandardDeviation;
     }
 
-    public GlobalResult getStandardGlobalResult() {
+    public Result getStandardGlobalResult() {
         HashMap<Integer, SoldierStatusReport> results = Utils.copySoldierStatusReportHashmap(this.standardResults);
         return this.calculateGlobalResultFromHashMap(results);
     }
 
-    public GlobalResult calculateGlobalResultFromHashMap(HashMap<Integer, SoldierStatusReport> results){
+    public Result calculateGlobalResultFromHashMap(HashMap<Integer, SoldierStatusReport> results){
         double mean = this.getGlobalMean(results);
         double standardDeviation = this.getGlobalStandardDeviation(mean, results);
-        GlobalResult globalResult = new GlobalResult();
-        globalResult.setMean(mean);
-        globalResult.setStandardDeviation(standardDeviation);
-        return globalResult;
+        Result result = new Result();
+        result.setMean(mean);
+        result.setStandardDeviation(standardDeviation);
+        return result;
     }
 
-    public HashMap<Integer,GlobalResult> getStandardResult() {
-        HashMap<Integer, GlobalResult> result = new HashMap<>();
+    public HashMap<Integer, Result> getStandardResult() {
+        HashMap<Integer, Result> result = new HashMap<>();
         HashMap<Integer, SoldierStatusReport> results = Utils.copySoldierStatusReportHashmap(this.standardResults);
 
         Iterator it = results.entrySet().iterator();
@@ -162,7 +134,7 @@ public class LoadSheddingManager {
             Map.Entry pair = (Map.Entry)it.next();
             Integer percent = (Integer) pair.getKey();
             SoldierStatusReport soldierStatusReport = (SoldierStatusReport) pair.getValue();
-            GlobalResult globalResult = new GlobalResult();
+            Result globalResult = new Result();
             globalResult.setLoadSheddingPercent(percent);
             globalResult.setStandardDeviation(soldierStatusReport.getStandardDeviation());
             globalResult.setMean(soldierStatusReport.getMean());
@@ -174,7 +146,7 @@ public class LoadSheddingManager {
         return result;
     }
 
-    public GlobalResult getGlobalResult() {
-        return globalResult;
+    public Result getResult() {
+        return result;
     }
 }

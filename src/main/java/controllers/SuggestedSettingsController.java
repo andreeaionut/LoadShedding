@@ -1,7 +1,7 @@
 package controllers;
 
 import core.Computation;
-import core.GlobalResult;
+import core.Result;
 import core.LoadShedderType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,7 +49,7 @@ public class SuggestedSettingsController {
         this.txtMaximumMeanError.textProperty().addListener((observable, oldValue, newValue) -> {
             double doubleMeanValue;
             double doubleStddevValue = 0;
-            GlobalResult suggestedSettings;
+            Result suggestedSettings;
             try{
                 doubleMeanValue = Double.valueOf(newValue);
             }catch(NumberFormatException e){
@@ -68,7 +68,7 @@ public class SuggestedSettingsController {
         this.txtMaximumStddevError.textProperty().addListener((observable, oldValue, newValue) -> {
             double doubleMeanValue = 0;
             double doubleStddevValue;
-            GlobalResult suggestedSettings;
+            Result suggestedSettings;
             try{
                 doubleStddevValue = Double.valueOf(newValue);
             }catch(NumberFormatException e){
@@ -93,7 +93,7 @@ public class SuggestedSettingsController {
         this.rbtnStddev.setSelected(false);
         this.rbtnTime.setSelected(false);
         this.rbtnBestRatio.setSelected(false);
-        GlobalResult suggestedSettings = this.loadSheddingService.getSuggestedSettings(this.computationType, this.loadShedderType, "mean", -1, -1);
+        Result suggestedSettings = this.loadSheddingService.getSuggestedSettings(this.computationType, this.loadShedderType, "mean", -1, -1);
         this.completeResults(suggestedSettings);
     }
 
@@ -104,7 +104,7 @@ public class SuggestedSettingsController {
         this.rbtnStddev.setSelected(false);
         this.rbtnMean.setSelected(false);
         this.rbtnBestRatio.setSelected(false);
-        GlobalResult suggestedSettings = this.loadSheddingService.getSuggestedSettings(this.computationType, this.loadShedderType, "timeConsumed", -1, -1);
+        Result suggestedSettings = this.loadSheddingService.getSuggestedSettings(this.computationType, this.loadShedderType, "timeConsumed", -1, -1);
         this.completeResults(suggestedSettings);
     }
 
@@ -115,7 +115,7 @@ public class SuggestedSettingsController {
         this.rbtnMean.setSelected(false);
         this.rbtnTime.setSelected(false);
         this.rbtnBestRatio.setSelected(false);
-        GlobalResult suggestedSettings = this.loadSheddingService.getSuggestedSettings(this.computationType, this.loadShedderType, "stddev", -1, -1);
+        Result suggestedSettings = this.loadSheddingService.getSuggestedSettings(this.computationType, this.loadShedderType, "stddev", -1, -1);
         this.completeResults(suggestedSettings);
     }
 
@@ -126,10 +126,10 @@ public class SuggestedSettingsController {
         this.rbtnMean.setSelected(false);
         this.rbtnTime.setSelected(false);
         this.rbtnStddev.setSelected(false);
-        GlobalResult suggestedSettings = this.loadSheddingService.getSuggestedSettings(this.computationType, this.loadShedderType, "bestRatio", -1, -1);
+        Result suggestedSettings = this.loadSheddingService.getSuggestedSettings(this.computationType, this.loadShedderType, "bestRatio", -1, -1);
         this.completeResults(suggestedSettings);
     }
-    private void completeResults(GlobalResult suggestedSettings) {
+    private void completeResults(Result suggestedSettings) {
         if(suggestedSettings == null){
             this.unsetLabelsText();
             this.lblErrorMessage.setVisible(true);

@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class SoldierStatusReport implements RecordableSoldier {
+public class SoldierStatusReport {
 
     private int id;
     private String type;
@@ -107,11 +107,6 @@ public class SoldierStatusReport implements RecordableSoldier {
 
     public void addMeasurement(BodyTemperatureMeasurement bodyTemperatureMeasurement){
         this.measurements.add(bodyTemperatureMeasurement);
-    }
-
-    @Override
-    public int getRecordableValue() {
-        return timestamp;
     }
 
     public int getTimestamp() {

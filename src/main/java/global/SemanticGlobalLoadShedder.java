@@ -1,16 +1,15 @@
-package loadshedders;
+package global;
 
 import core.BodyTemperatureMeasurement;
 import core.LoadShedderType;
 import core.Measurement;
 import core.SoldierStatusReport;
 
-import java.util.HashMap;
 import java.util.Random;
 
-public class SemanticLoadShedder extends LoadShedder {
+public class SemanticGlobalLoadShedder extends GlobalLoadShedder {
 
-    public SemanticLoadShedder(String inputFile, int computationFieldNumber) {
+    public SemanticGlobalLoadShedder(String inputFile, int computationFieldNumber) {
         super(inputFile, computationFieldNumber);
         this.loadShedderType = LoadShedderType.SEMANTIC;
     }
@@ -35,7 +34,7 @@ public class SemanticLoadShedder extends LoadShedder {
             Measurement<Double> bodyTemperatureMeasurement = (BodyTemperatureMeasurement) soldierStatusReport.getMeasurements().remove(randomIndex);
             soldierStatusReport.setNumberOfValues(soldierStatusReport.getNumberOfValues() - 1);
             soldierStatusReport.setSumOfBodyTemperature(soldierStatusReport.getSumOfBodyTemperature() - bodyTemperatureMeasurement.getValue());
-            this.loadSheddingManager.setStatusReportResults(soldierStatusReport);
+            this.globalLoadSheddingManager.setStatusReportResults(soldierStatusReport);
         }
     }
 }

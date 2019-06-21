@@ -1,4 +1,4 @@
-package loadshedders;
+package services;
 
 import core.Computation;
 import core.LoadShedderType;

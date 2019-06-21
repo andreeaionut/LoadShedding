@@ -210,7 +210,7 @@ public class MainController {
             controller.initView(this.tbtnCompare.isSelected(), this.computationType, this.loadShedderType, this.loadSheddingService, this.loadSheddingFinalResult);
             Stage stage = new Stage();
             stage.setTitle("Chart Menu");
-            stage.setScene(new Scene(root, 350, 400));
+            stage.setScene(new Scene(root, 400, 400));
             stage.show();
         }
         catch (IOException e) {

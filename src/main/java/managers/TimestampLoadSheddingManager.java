@@ -1,19 +1,19 @@
 package managers;
 
-import core.GlobalResult;
+import core.Result;
 import core.Soldier;
 import utils.CpuLoad;
 import utils.Utils;
 
 import java.util.*;
 
-public class TimestampLSManager {
+public class TimestampLoadSheddingManager {
 
     private List<Soldier> data;
     private HashMap<Integer, List<Soldier>> results = new HashMap<>();
-    private HashMap<Integer, GlobalResult> standardResults;
+    private HashMap<Integer, Result> standardResults;
 
-    public TimestampLSManager(String inputFile, int computationFieldNumber) {
+    public TimestampLoadSheddingManager(String inputFile, int computationFieldNumber) {
         this.data = FileManager.getDataFromFile(inputFile, computationFieldNumber);
         this.createTimestampHashMap();
         this.standardResults = createStandardResults();
@@ -46,8 +46,8 @@ public class TimestampLSManager {
         return standardDeviation;
     }
 
-    public HashMap<Integer, GlobalResult> createStandardResults(){
-        HashMap<Integer, GlobalResult> results = new HashMap<>();
+    public HashMap<Integer, Result> createStandardResults(){
+        HashMap<Integer, Result> results = new HashMap<>();
         HashMap<Integer, List<Soldier>> resultsCopy = Utils.copySoldiersHashmap(this.results);
         Iterator it = resultsCopy.entrySet().iterator();
         float smoothLoad = 0;
@@ -74,21 +74,21 @@ public class TimestampLSManager {
             double dt = (threadTime - lastThreadTime) / (double)(time - lastTime);
             smoothLoad += (dt - smoothLoad) * 0.4;
 
-            GlobalResult globalResult = new GlobalResult();
-            globalResult.setMean(mean);
-            globalResult.setStandardDeviation(standardDeviation);
-            globalResult.setStandardCalculationTime(smoothLoad);
-            results.put((Integer) pair.getKey(), globalResult);
+            Result result = new Result();
+            result.setMean(mean);
+            result.setStandardDeviation(standardDeviation);
+            result.setStandardCalculationTime(smoothLoad);
+            results.put((Integer) pair.getKey(), result);
             it.remove();
         }
         return results;
     }
 
-    public HashMap<Integer, GlobalResult> getStandardResults() {
+    public HashMap<Integer, Result> getStandardResults() {
         return standardResults;
     }
 
-    public void setStandardResults(HashMap<Integer, GlobalResult> standardResults) {
+    public void setStandardResults(HashMap<Integer, Result> standardResults) {
         this.standardResults = standardResults;
     }
 }

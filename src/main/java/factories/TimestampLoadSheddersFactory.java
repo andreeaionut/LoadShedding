@@ -1,9 +1,9 @@
-package managers;
+package factories;
 
 import core.LoadShedderType;
-import timestamp.LoadShedderTS;
-import timestamp.RandomLoadShedderTS;
-import timestamp.SemanticLoadShedderTS;
+import timestamp.TimestampLoadShedder;
+import timestamp.RandomTimestampLoadShedder;
+import timestamp.SemanticTimestampLoadShedder;
 
 public class TimestampLoadSheddersFactory {
     private static TimestampLoadSheddersFactory instance;
@@ -18,12 +18,12 @@ public class TimestampLoadSheddersFactory {
         return instance;
     }
 
-    public LoadShedderTS getLoadShedder(LoadShedderType type, String inputFile, int computationFieldNumber){
+    public TimestampLoadShedder getLoadShedder(LoadShedderType type, String inputFile, int computationFieldNumber){
         if(type.equals(LoadShedderType.RANDOM)){
-            return new RandomLoadShedderTS(inputFile, computationFieldNumber);
+            return new RandomTimestampLoadShedder(inputFile, computationFieldNumber);
         }
         if(type.equals(LoadShedderType.SEMANTIC)){
-            return new SemanticLoadShedderTS(inputFile, computationFieldNumber);
+            return new SemanticTimestampLoadShedder(inputFile, computationFieldNumber);
         }
         return null;
     }

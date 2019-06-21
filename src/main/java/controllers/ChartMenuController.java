@@ -1,7 +1,7 @@
 package controllers;
 
 import core.Computation;
-import core.GlobalResult;
+import core.Result;
 import core.LoadShedderType;
 import core.LoadSheddingFinalResult;
 import javafx.beans.value.ChangeListener;
@@ -20,7 +20,7 @@ public class ChartMenuController {
 
     private LoadShedderType loadShedderType;
     private HashMap<LoadShedderType, LoadSheddingFinalResult> comparatorErrors;
-    private HashMap<Integer, GlobalResult> globalErrors;
+    private HashMap<Integer, Result> globalErrors;
     private LoadSheddingFinalResult loadSheddingFinalResult;
 
     private LoadSheddingService loadSheddingService;

@@ -5,8 +5,8 @@ import core.*;
 import java.util.List;
 import java.util.Random;
 
-public class RandomLoadShedderTS extends LoadShedderTS {
-    public RandomLoadShedderTS(String inputFile, int computationFieldNumber) {
+public class RandomTimestampLoadShedder extends TimestampLoadShedder {
+    public RandomTimestampLoadShedder(String inputFile, int computationFieldNumber) {
         super(inputFile, computationFieldNumber);
         this.loadShedderType = LoadShedderType.RANDOM;
     }

@@ -1,4 +1,4 @@
-package loadshedders;
+package global;
 
 import core.BodyTemperatureMeasurement;
 import core.LoadShedderType;
@@ -7,9 +7,9 @@ import core.SoldierStatusReport;
 
 import java.util.*;
 
-public class RandomLoadShedder extends LoadShedder {
+public class RandomGlobalLoadShedder extends GlobalLoadShedder {
 
-    public RandomLoadShedder(String inputFile, int computationFieldNumber) {
+    public RandomGlobalLoadShedder(String inputFile, int computationFieldNumber) {
         super(inputFile, computationFieldNumber);
         this.loadShedderType = LoadShedderType.RANDOM;
     }
@@ -24,7 +24,7 @@ public class RandomLoadShedder extends LoadShedder {
             Measurement<Double> bodyTemperatureMeasurement = (BodyTemperatureMeasurement) soldierStatusReport.getMeasurements().remove(randomIndex);
             soldierStatusReport.setNumberOfValues(soldierStatusReport.getNumberOfValues() - 1);
             soldierStatusReport.setSumOfBodyTemperature(soldierStatusReport.getSumOfBodyTemperature() - bodyTemperatureMeasurement.getValue());
-            this.loadSheddingManager.setStatusReportResults(soldierStatusReport);
+            this.globalLoadSheddingManager.setStatusReportResults(soldierStatusReport);
         }
     }
 

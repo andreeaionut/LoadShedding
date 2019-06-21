@@ -9,8 +9,8 @@ public class LoadSheddingFinalResult {
     private LoadShedderType loadShedderType;
     private Computation computationType;
 
-    private HashMap<Integer, GlobalResult> standardResults;
-    private HashMap<Integer, GlobalResult> loadSheddedResults;
+    private HashMap<Integer, Result> standardResults;
+    private HashMap<Integer, Result> loadSheddedResults;
 
     public LoadSheddingFinalResult() {
         this.standardResults = new HashMap<>();
@@ -27,19 +27,19 @@ public class LoadSheddingFinalResult {
     }
 
 
-    public HashMap<Integer, GlobalResult> getStandardResults() {
+    public HashMap<Integer, Result> getStandardResults() {
         return standardResults;
     }
 
-    public void setStandardResults(HashMap<Integer, GlobalResult> standardResults) {
+    public void setStandardResults(HashMap<Integer, Result> standardResults) {
         this.standardResults = standardResults;
     }
 
-    public HashMap<Integer, GlobalResult> getLoadSheddedResults() {
+    public HashMap<Integer, Result> getLoadSheddedResults() {
         return loadSheddedResults;
     }
 
-    public void setLoadSheddedResults(HashMap<Integer, GlobalResult> loadSheddedResults) {
+    public void setLoadSheddedResults(HashMap<Integer, Result> loadSheddedResults) {
         this.loadSheddedResults = loadSheddedResults;
     }
 

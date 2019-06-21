@@ -1,11 +1,10 @@
 package services;
 
 import core.*;
-import loadshedders.LoadShedder;
-import loadshedders.LoadShedderComparator;
-import managers.LoadSheddersFactory;
-import managers.TimestampLoadSheddersFactory;
-import timestamp.LoadShedderTS;
+import global.GlobalLoadShedder;
+import factories.GlobalLoadSheddersFactory;
+import factories.TimestampLoadSheddersFactory;
+import timestamp.TimestampLoadShedder;
 import utils.Utils;
 
 import java.util.HashMap;
@@ -14,9 +13,9 @@ import java.util.Map;
 
 public class LoadSheddingService {
 
-    private HashMap<Integer, GlobalResult> globalResults = new HashMap<>();
-    private HashMap<Integer, List<GlobalResult>> loadSheddedResultsPerTimestamp = new HashMap<>();
-    private HashMap<Integer, GlobalResult> resultsPerPercent = new HashMap<>();
+    private HashMap<Integer, Result> globalResults = new HashMap<>();
+    private HashMap<Integer, List<Result>> loadSheddedResultsPerTimestamp = new HashMap<>();
+    private HashMap<Integer, Result> resultsPerPercent = new HashMap<>();
     private HashMap<LoadShedderType, LoadSheddingFinalResult> comparatorErrors;
 
     private LoadSheddingFinalResult loadSheddingTimestampRandomFinalResult;
@@ -41,13 +40,13 @@ public class LoadSheddingService {
 
     public LoadSheddingFinalResult shedLoad(String inputFile, LoadShedderType loadShedderType, Computation computation, int computationFieldNumber){
         if(computation.equals(Computation.GLOBAL)){
-            LoadShedder loadShedder = null;
+            GlobalLoadShedder globalLoadShedder = null;
             switch(loadShedderType){
                 case RANDOM:
                 {
                     if(this.loadSheddingGlobalRandomFinalResult == null || this.previousComputationFieldNumber != computationFieldNumber){
-                        loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
-                        globalResults = loadShedder.shedLoad();
+                        globalLoadShedder = GlobalLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
+                        globalResults = globalLoadShedder.shedLoad();
                         this.loadSheddingGlobalRandomFinalResult = new LoadSheddingFinalResult();
                         this.loadSheddingGlobalRandomFinalResult.setLoadSheddedResults(globalResults);
                     }
@@ -57,8 +56,8 @@ public class LoadSheddingService {
                 case SEMANTIC:
                 {
                     if(this.loadSheddingGlobalSemanticFinalResult == null || this.previousComputationFieldNumber != computationFieldNumber){
-                        loadShedder = LoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
-                        globalResults = loadShedder.shedLoad();
+                        globalLoadShedder = GlobalLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
+                        globalResults = globalLoadShedder.shedLoad();
                         this.loadSheddingGlobalSemanticFinalResult = new LoadSheddingFinalResult();
                         this.loadSheddingGlobalSemanticFinalResult.setLoadSheddedResults(globalResults);
                     }
@@ -71,13 +70,13 @@ public class LoadSheddingService {
                 case RANDOM:
                 {
                     if(this.loadSheddingTimestampRandomFinalResult == null || this.previousComputationFieldNumber != computationFieldNumber){
-                        LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
-                        this.loadSheddedResultsPerTimestamp = loadShedderTS.shedLoad();
-                        this.resultsPerPercent = loadShedderTS.getResultsPerPercent();
+                        TimestampLoadShedder timestampLoadShedder = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
+                        this.loadSheddedResultsPerTimestamp = timestampLoadShedder.shedLoad();
+                        this.resultsPerPercent = timestampLoadShedder.getResultsPerPercent();
                         this.loadSheddingTimestampRandomFinalResult = new LoadSheddingFinalResult();
                         this.loadSheddingTimestampRandomFinalResult.setLoadShedderType(loadShedderType);
                         this.loadSheddingTimestampRandomFinalResult.setLoadSheddedResults(Utils.copyGlobalResultsReportHashmap(resultsPerPercent));
-                        this.loadSheddingTimestampRandomFinalResult.setStandardResults(loadShedderTS.getStandardResults());
+                        this.loadSheddingTimestampRandomFinalResult.setStandardResults(timestampLoadShedder.getStandardResults());
                     }
                     this.previousComputationFieldNumber = computationFieldNumber;
                     return this.loadSheddingTimestampRandomFinalResult;
@@ -85,13 +84,13 @@ public class LoadSheddingService {
                 case SEMANTIC:
                 {
                     if(this.loadSheddingTimestampSemanticFinalResult == null || this.previousComputationFieldNumber != computationFieldNumber){
-                        LoadShedderTS loadShedderTS = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
-                        this.loadSheddedResultsPerTimestamp = loadShedderTS.shedLoad();
-                        this.resultsPerPercent = loadShedderTS.getResultsPerPercent();
+                        TimestampLoadShedder timestampLoadShedder = TimestampLoadSheddersFactory.getInstance().getLoadShedder(loadShedderType, inputFile, computationFieldNumber);
+                        this.loadSheddedResultsPerTimestamp = timestampLoadShedder.shedLoad();
+                        this.resultsPerPercent = timestampLoadShedder.getResultsPerPercent();
                         this.loadSheddingTimestampSemanticFinalResult = new LoadSheddingFinalResult();
                         this.loadSheddingTimestampSemanticFinalResult.setLoadShedderType(loadShedderType);
                         this.loadSheddingTimestampSemanticFinalResult.setLoadSheddedResults(Utils.copyGlobalResultsReportHashmap(resultsPerPercent));
-                        this.loadSheddingTimestampSemanticFinalResult.setStandardResults(loadShedderTS.getStandardResults());
+                        this.loadSheddingTimestampSemanticFinalResult.setStandardResults(timestampLoadShedder.getStandardResults());
                     }
                     this.previousComputationFieldNumber = computationFieldNumber;
                     return this.loadSheddingTimestampSemanticFinalResult;
@@ -101,10 +100,10 @@ public class LoadSheddingService {
         return null;
     }
 
-    public GlobalResult getSuggestedSettings(Computation computationType, LoadShedderType loadShedderType, String minimumValueType, double maximumMeanError, double maximumStddevError){
+    public Result getSuggestedSettings(Computation computationType, LoadShedderType loadShedderType, String minimumValueType, double maximumMeanError, double maximumStddevError){
         LoadSheddingFinalResult loadSheddingFinalResult = this.getLoadSheddingFinalResultByComputationAndType(computationType, loadShedderType);
-        Map<Integer, GlobalResult> sortedResults = Utils.sortByComparator(loadSheddingFinalResult.getLoadSheddedResults(), minimumValueType, ASC);
-        for (Map.Entry<Integer, GlobalResult> entry : sortedResults.entrySet()) {
+        Map<Integer, Result> sortedResults = Utils.sortByComparator(loadSheddingFinalResult.getLoadSheddedResults(), minimumValueType, ASC);
+        for (Map.Entry<Integer, Result> entry : sortedResults.entrySet()) {
             if(maximumMeanError == -1 && maximumStddevError == -1){
                 return entry.getValue();
             }
@@ -145,11 +144,11 @@ public class LoadSheddingService {
         return this.comparatorErrors;
     }
 
-    public HashMap<Integer, GlobalResult> getGlobalResults() {
+    public HashMap<Integer, Result> getGlobalResults() {
         return globalResults;
     }
 
-    public HashMap<Integer, GlobalResult> getResultsPerPercent() {
+    public HashMap<Integer, Result> getResultsPerPercent() {
         return resultsPerPercent;
     }
 
@@ -157,11 +156,11 @@ public class LoadSheddingService {
         return loadSheddingGlobalFinalResult;
     }
 
-    public List<GlobalResult> getLoadSheddedResultsPerGivenTimestamp(int timestamp) {
+    public List<Result> getLoadSheddedResultsPerGivenTimestamp(int timestamp) {
         return this.loadSheddedResultsPerTimestamp.get(timestamp);
     }
 
-    public HashMap<Integer, List<GlobalResult>> getLoadSheddedResultsPerTimestamp() {
+    public HashMap<Integer, List<Result>> getLoadSheddedResultsPerTimestamp() {
         return loadSheddedResultsPerTimestamp;
     }
 }

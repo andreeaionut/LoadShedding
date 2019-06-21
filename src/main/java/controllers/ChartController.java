@@ -1,7 +1,7 @@
 package controllers;
 
 import core.Computation;
-import core.GlobalResult;
+import core.Result;
 import core.LoadShedderType;
 import core.LoadSheddingFinalResult;
 import javafx.embed.swing.SwingFXUtils;
@@ -77,7 +77,7 @@ public class ChartController {
         }catch (NumberFormatException e){
 
         }
-        List<GlobalResult> resultsPerTimestamp = this.loadSheddingService.getLoadSheddedResultsPerGivenTimestamp(timestamp);
+        List<Result> resultsPerTimestamp = this.loadSheddingService.getLoadSheddedResultsPerGivenTimestamp(timestamp);
         if(resultsPerTimestamp == null){
             return;
         }
@@ -96,15 +96,15 @@ public class ChartController {
             meanSeries.setName("Mean error");
             stddevSeries.setName("Standard deviation error");
 
-            for(GlobalResult globalResult : resultsPerTimestamp){
-                meanSeries.getData().add(new XYChart.Data(globalResult.getLoadSheddingPercent(), globalResult.getMeanError()));
-                stddevSeries.getData().add(new XYChart.Data(globalResult.getLoadSheddingPercent(), globalResult.getStddevError()));
+            for(Result result : resultsPerTimestamp){
+                meanSeries.getData().add(new XYChart.Data(result.getLoadSheddingPercent(), result.getMeanError()*100));
+                stddevSeries.getData().add(new XYChart.Data(result.getLoadSheddingPercent(), result.getStddevError()*100));
             }
             lineChart.getData().add(meanSeries);
             lineChart.getData().add(stddevSeries);
         }else{
-            for(GlobalResult globalResult : resultsPerTimestamp){
-                series.getData().add(new XYChart.Data(globalResult.getLoadSheddingPercent(), globalResult.getValue(chartType)));
+            for(Result result : resultsPerTimestamp){
+                series.getData().add(new XYChart.Data(result.getLoadSheddingPercent(), result.getValue(chartType)));
             }
             lineChart.getData().add(series);
         }
@@ -127,14 +127,14 @@ public class ChartController {
         this.chartType = "all";
 
         NumberAxis xAxis = new NumberAxis();
-        NumberAxis yAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis(0.0, 3.0, 0.01);
         xAxis.setLabel("Load Shedding Percent");
         lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle("Load Shedding Errors");
 
         List<XYChart.Series> series = new ArrayList<>();
 
-        HashMap<Integer, GlobalResult> lsResults = Utils.copyGlobalResultsReportHashmap(loadSheddedResult.getLoadSheddedResults());
+        HashMap<Integer, Result> lsResults = Utils.copyGlobalResultsReportHashmap(loadSheddedResult.getLoadSheddedResults());
         Iterator it = lsResults.entrySet().iterator();
         XYChart.Series meanSeries = new XYChart.Series();
         XYChart.Series stddevSeries = new XYChart.Series();
@@ -144,9 +144,9 @@ public class ChartController {
 
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            GlobalResult globalResult = (GlobalResult) pair.getValue();
-            meanSeries.getData().add(new XYChart.Data(pair.getKey(), globalResult.getMeanError()));
-            stddevSeries.getData().add(new XYChart.Data(pair.getKey(), globalResult.getStddevError()));
+            Result result = (Result) pair.getValue();
+            meanSeries.getData().add(new XYChart.Data(pair.getKey(), result.getMeanError()));
+            stddevSeries.getData().add(new XYChart.Data(pair.getKey(), result.getStddevError()));
             it.remove();
         }
 
@@ -194,9 +194,9 @@ public class ChartController {
             XYChart.Series newSeries = new XYChart.Series();
             newSeries.setName(pair.getKey().toString());
             LoadSheddingFinalResult loadSheddingFinalResult = (LoadSheddingFinalResult) pair.getValue();
-            HashMap<Integer, GlobalResult> loadSheddedResults = loadSheddingFinalResult.getLoadSheddedResults();
+            HashMap<Integer, Result> loadSheddedResults = loadSheddingFinalResult.getLoadSheddedResults();
             for(int percent = 10; percent<=90; percent+=10){
-                newSeries.getData().add(new XYChart.Data(percent, loadSheddedResults.get(percent).getValue(chartType)));
+                newSeries.getData().add(new XYChart.Data(percent, loadSheddedResults.get(percent).getValue(chartType)*100));
             }
             series.add(newSeries);
             it.remove();
@@ -221,12 +221,15 @@ public class ChartController {
         this.chartType = chartType;
         NumberAxis xAxis = new NumberAxis(0, 100, 10);
         xAxis.setLabel("Load Shedding Percent");
-        NumberAxis yAxis = new NumberAxis   ();
-        yAxis.setLabel("Mean error");
+        NumberAxis yAxis = new NumberAxis();
+        if(chartType.contains("Error")){
+            yAxis.setLabel("Relative " + chartType.replace("Error", "") + " error");
+        }
+
         lineChart = new LineChart(xAxis, yAxis);
         XYChart.Series series = new XYChart.Series();
-        HashMap<Integer, GlobalResult> lsResults = loadSheddingFinalResult.getLoadSheddedResults();
-        series.setName(loadShedderType.toString() + " Load shedder error evolution");
+        HashMap<Integer, Result> lsResults = loadSheddingFinalResult.getLoadSheddedResults();
+        series.setName(loadShedderType.toString() + " Load shedder relative error evolution");
         series.getData().add(new XYChart.Data(10, lsResults.get(10).getValue(chartType)));
         series.getData().add(new XYChart.Data(20, lsResults.get(20).getValue(chartType)));
         series.getData().add(new XYChart.Data(30, lsResults.get(30).getValue(chartType)));
@@ -245,7 +248,7 @@ public class ChartController {
         scene.getStylesheets().clear();
         scene.getStylesheets().add(css);
 
-        stage.setTitle("Global " + loadShedderType.toString() + " Load Shedder");
+        stage.setTitle(computationType + " " + loadShedderType.toString() + " Load Shedder");
         stage.setScene(scene);
         stage.show();
     }
@@ -259,18 +262,18 @@ public class ChartController {
         lineChart.setTitle("Time consumed");
         List<XYChart.Series> series = new ArrayList<>();
 
-        HashMap<Integer, GlobalResult> loadSheddedResults = Utils.copyGlobalResultsReportHashmap(loadSheddingFinalResult.getLoadSheddedResults());
-        HashMap<Integer, GlobalResult> standardResults = Utils.copyGlobalResultsReportHashmap(loadSheddingFinalResult.getStandardResults());
+        HashMap<Integer, Result> loadSheddedResults = Utils.copyGlobalResultsReportHashmap(loadSheddingFinalResult.getLoadSheddedResults());
+        HashMap<Integer, Result> standardResults = Utils.copyGlobalResultsReportHashmap(loadSheddingFinalResult.getStandardResults());
 
         Iterator it = loadSheddedResults.entrySet().iterator();
         XYChart.Series lsSeries = new XYChart.Series();
-        lsSeries.setName("Load shedded TIME");
+        lsSeries.setName("Load shedded time");
 
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             Integer percent = (Integer) pair.getKey();
-            GlobalResult globalResult = (GlobalResult) pair.getValue();
-            lsSeries.getData().add(new XYChart.Data(percent, globalResult.getLsCalculationTime()));
+            Result result = (Result) pair.getValue();
+            lsSeries.getData().add(new XYChart.Data(percent, result.getLsCalculationTime()));
             it.remove();
         }
         series.add(lsSeries);
@@ -307,8 +310,8 @@ public class ChartController {
 
         }
         this.loadSheddingFinalResult = loadSheddingFinalResult;
-        List<GlobalResult> lsResultsPerTimestamp = loadSheddingService.getLoadSheddedResultsPerGivenTimestamp(intValueOfTimestamp);
-        GlobalResult standardResult = loadSheddingFinalResult.getStandardResults().get(intValueOfTimestamp);
+        List<Result> lsResultsPerTimestamp = loadSheddingService.getLoadSheddedResultsPerGivenTimestamp(intValueOfTimestamp);
+        Result standardResult = loadSheddingFinalResult.getStandardResults().get(intValueOfTimestamp);
 
         if(lsResultsPerTimestamp == null || standardResult == null){
             return;

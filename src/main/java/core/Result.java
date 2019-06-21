@@ -1,6 +1,6 @@
 package core;
 
-public class GlobalResult {
+public class Result {
     private double mean;
     private double standardDeviation;
 
@@ -11,10 +11,10 @@ public class GlobalResult {
     private double standardCalculationTime;
     private int loadSheddingPercent;
 
-    public GlobalResult() {
+    public Result() {
     }
 
-    public GlobalResult(double mean, double standardDeviation) {
+    public Result(double mean, double standardDeviation) {
         this.mean = mean;
         this.standardDeviation = standardDeviation;
     }

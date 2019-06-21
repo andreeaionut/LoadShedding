@@ -1,49 +1,48 @@
 package timestamp;
 
-import com.sun.management.OperatingSystemMXBean;
-import core.GlobalResult;
+import core.Result;
 import core.LoadShedderType;
 import core.Soldier;
-import managers.TimestampLSManager;
+import managers.TimestampLoadSheddingManager;
 import utils.CpuLoad;
 import utils.Utils;
 
 import java.util.*;
 
-public abstract class LoadShedderTS {
+public abstract class TimestampLoadShedder {
 
     private static int LS_PERCENT_STEP_SIZE = 10;
     private static int MAX_LS_PERCENT = 90;
 
-    private TimestampLSManager loadSheddingManager;
-    private HashMap<Integer, GlobalResult> standardResults;
-    private HashMap<Integer, List<GlobalResult>> loadSheddedResults;
+    private TimestampLoadSheddingManager loadSheddingManager;
+    private HashMap<Integer, Result> standardResults;
+    private HashMap<Integer, List<Result>> loadSheddedResults;
     private HashMap<Integer, List<Soldier>> data;
     protected LoadShedderType loadShedderType;
 
-    public LoadShedderTS(String inputFile, int computationFieldNumber){
-        this.loadSheddingManager = new TimestampLSManager(inputFile, computationFieldNumber);
+    public TimestampLoadShedder(String inputFile, int computationFieldNumber){
+        this.loadSheddingManager = new TimestampLoadSheddingManager(inputFile, computationFieldNumber);
         this.standardResults = this.loadSheddingManager.createStandardResults();
         this.data = this.loadSheddingManager.getData();
     }
 
     public abstract void dropTuples(int dropPercent, List<Soldier> soldiers);
 
-    public HashMap<Integer, GlobalResult> getStandardResults(){
+    public HashMap<Integer, Result> getStandardResults(){
         return this.standardResults;
     }
 
-    public HashMap<Integer, List<GlobalResult>> shedLoad(){
+    public HashMap<Integer, List<Result>> shedLoad(){
         System.out.println("load shedding...");
-        HashMap<Integer, List<GlobalResult>> loadSheddedResults = new HashMap<>();
-        HashMap<Integer, GlobalResult> resultsBeforeLoadShedding = Utils.copyGlobalResultsReportHashmap(this.standardResults);
+        HashMap<Integer, List<Result>> loadSheddedResults = new HashMap<>();
+        HashMap<Integer, Result> resultsBeforeLoadShedding = Utils.copyGlobalResultsReportHashmap(this.standardResults);
         Iterator it = resultsBeforeLoadShedding.entrySet().iterator();
         float smoothLoad = 0;
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             int currentLoadSheddingPercent = LS_PERCENT_STEP_SIZE;
             int timestamp = (int) pair.getKey();
-            List<GlobalResult> errorsPerTimestamp = new ArrayList<>();
+            List<Result> errorsPerTimestamp = new ArrayList<>();
             while(currentLoadSheddingPercent <= MAX_LS_PERCENT){
                 List<Soldier> beforeLS = this.data.get(timestamp);
                 dropTuples(currentLoadSheddingPercent, beforeLS);
@@ -63,14 +62,14 @@ public abstract class LoadShedderTS {
                 double dt = (threadTime - lastThreadTime) / (double)(time - lastTime);
                 smoothLoad += (dt - smoothLoad) * 0.4;
 
-                GlobalResult globalResult = new GlobalResult();
-                globalResult.setMean(mean);
-                globalResult.setMeanError(meanError);
-                globalResult.setStandardDeviation(standardDeviation);
-                globalResult.setStddevError(standardDeviationError);
-                globalResult.setLsCalculationTime(smoothLoad);
-                globalResult.setLoadSheddingPercent(currentLoadSheddingPercent);
-                errorsPerTimestamp.add(globalResult);
+                Result result = new Result();
+                result.setMean(mean);
+                result.setMeanError(meanError);
+                result.setStandardDeviation(standardDeviation);
+                result.setStddevError(standardDeviationError);
+                result.setLsCalculationTime(smoothLoad);
+                result.setLoadSheddingPercent(currentLoadSheddingPercent);
+                errorsPerTimestamp.add(result);
                 currentLoadSheddingPercent += LS_PERCENT_STEP_SIZE;
             }
             it.remove();
@@ -80,8 +79,8 @@ public abstract class LoadShedderTS {
         return loadSheddedResults;
     }
 
-    public HashMap<Integer, GlobalResult> getResultsPerPercent(){
-        HashMap<Integer, GlobalResult> result = new HashMap<>();
+    public HashMap<Integer, Result> getResultsPerPercent(){
+        HashMap<Integer, Result> result = new HashMap<>();
         int currentPercent = LS_PERCENT_STEP_SIZE;
         while(currentPercent <= MAX_LS_PERCENT) {
             double meanSum = 0;
@@ -90,7 +89,7 @@ public abstract class LoadShedderTS {
             double stdDevErrorSum = 0;
             int values = 0;
             double timeConsumed = 0;
-            for (Map.Entry<Integer, List<GlobalResult>> entry : this.loadSheddedResults.entrySet()) {
+            for (Map.Entry<Integer, List<Result>> entry : this.loadSheddedResults.entrySet()) {
                 meanSum += entry.getValue().get(currentPercent/10 - 1).getMean();
                 meanErrorSum += entry.getValue().get(currentPercent/10 - 1).getMeanError();
                 stdDevSum += entry.getValue().get(currentPercent/10 - 1).getStandardDeviation();
@@ -102,7 +101,7 @@ public abstract class LoadShedderTS {
             double meanError = meanErrorSum / values;
             double stdDev = stdDevSum / values;
             double stdDevError = stdDevErrorSum / values;
-            GlobalResult globalResult = new GlobalResult();
+            Result globalResult = new Result();
             globalResult.setMean(mean);
             globalResult.setMeanError(meanError);
             globalResult.setStandardDeviation(stdDev);

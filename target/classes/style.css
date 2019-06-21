@@ -85,6 +85,19 @@
 
 }
 
+.chart-legend-item{
+    -fx-text-fill: #191970;
+}
+
+.chart-title {
+    -fx-text-fill: #4682b4;
+    -fx-font-size: 1.6em;
+}
+
+.axis-label {
+    -fx-text-fill: #4682b4;
+}
+
 .text-field{
     -fx-background-color: 	#ADD8E6;
     -fx-text-fill: white;
@@ -93,6 +106,12 @@
 }
 
 .radio-button{
+    -fx-font-family: "Georgia";
+    -fx-text-fill: whitesmoke;
+    -fx-font-size: 0.5cm;
+}
+
+.check-box{
     -fx-font-family: "Georgia";
     -fx-text-fill: whitesmoke;
     -fx-font-size: 0.5cm;
@@ -132,7 +151,7 @@
     -fx-text-fill: whitesmoke;
 }
 
-#mainAnchorPane{
+#mainAnchorPane, #rootChart{
     -fx-background-color: #2A5058;
 }
 

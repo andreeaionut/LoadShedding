@@ -26,18 +26,18 @@ public class Utils {
         return copy;
     }
 
-    public static HashMap<Integer, GlobalResult> copyGlobalResultsReportHashmap(HashMap<Integer, GlobalResult> original){
-        HashMap<Integer, GlobalResult> copy = new HashMap<>();
-        for (Map.Entry<Integer, GlobalResult> entry : original.entrySet()) {
-            GlobalResult globalResult = new GlobalResult();
-            globalResult.setStandardDeviation(entry.getValue().getStandardDeviation());
-            globalResult.setMean(entry.getValue().getMean());
-            globalResult.setLsCalculationTime(entry.getValue().getLsCalculationTime());
-            globalResult.setStddevError(entry.getValue().getStddevError());
-            globalResult.setMeanError(entry.getValue().getMeanError());
-            globalResult.setStandardCalculationTime(entry.getValue().getStandardCalculationTime());
-            globalResult.setLoadSheddingPercent(entry.getValue().getLoadSheddingPercent());
-            copy.put(entry.getKey(), globalResult);
+    public static HashMap<Integer, Result> copyGlobalResultsReportHashmap(HashMap<Integer, Result> original){
+        HashMap<Integer, Result> copy = new HashMap<>();
+        for (Map.Entry<Integer, Result> entry : original.entrySet()) {
+            Result result = new Result();
+            result.setStandardDeviation(entry.getValue().getStandardDeviation());
+            result.setMean(entry.getValue().getMean());
+            result.setLsCalculationTime(entry.getValue().getLsCalculationTime());
+            result.setStddevError(entry.getValue().getStddevError());
+            result.setMeanError(entry.getValue().getMeanError());
+            result.setStandardCalculationTime(entry.getValue().getStandardCalculationTime());
+            result.setLoadSheddingPercent(entry.getValue().getLoadSheddingPercent());
+            copy.put(entry.getKey(), result);
         }
         return copy;
     }
@@ -54,11 +54,11 @@ public class Utils {
         return copy;
     }
 
-    public static Map<Integer, GlobalResult> sortByComparator(Map<Integer, GlobalResult> unsortedMap, String valueType, final boolean order) {
-        List<Map.Entry<Integer, GlobalResult>> list = new LinkedList<Map.Entry<Integer, GlobalResult>>(unsortedMap.entrySet());
-        Collections.sort(list, new Comparator<Map.Entry<Integer, GlobalResult>>() {
-            public int compare(Map.Entry<Integer, GlobalResult> o1,
-                               Map.Entry<Integer, GlobalResult> o2) {
+    public static Map<Integer, Result> sortByComparator(Map<Integer, Result> unsortedMap, String valueType, final boolean order) {
+        List<Map.Entry<Integer, Result>> list = new LinkedList<Map.Entry<Integer, Result>>(unsortedMap.entrySet());
+        Collections.sort(list, new Comparator<Map.Entry<Integer, Result>>() {
+            public int compare(Map.Entry<Integer, Result> o1,
+                               Map.Entry<Integer, Result> o2) {
                 if (order) {
                     return Double.compare(o1.getValue().getValue(valueType), o2.getValue().getValue(valueType));
                 }
@@ -67,8 +67,8 @@ public class Utils {
                 }
             }
         });
-        Map<Integer, GlobalResult> sortedMap = new LinkedHashMap<>();
-        for (Map.Entry<Integer, GlobalResult> entry : list) {
+        Map<Integer, Result> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<Integer, Result> entry : list) {
             sortedMap.put(entry.getKey(), entry.getValue());
         }
         return sortedMap;
